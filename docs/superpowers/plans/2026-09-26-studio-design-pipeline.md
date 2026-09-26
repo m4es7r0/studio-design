@@ -2510,6 +2510,7 @@ repository is `~/job/studio-design`; its docs are the rules you follow.
 ## Invariants
 
 - Work only inside the client container. Never write client material into `~/job/studio-design`.
+- Paths written `design/...` are relative to the client container `~/job/clients/<slug>/`. The session's working directory is `design/`, so commands use paths relative to it (`ds/scripts/...`, `figma/...`).
 - Every stage follows its reference in `references/`. Read it before starting the stage; it names every input file. Do not look for inputs it does not name.
 - A stage ends only when its gate passes and `design/progress.md` records the evidence (command output, screenshot paths, decision entries). Evidence is pasted, never typed from memory.
 - 🧑 checkpoints: prepare the material and the questions in the client's language, then stop. The user takes them to the client; answers go to `design/decisions.md`.
@@ -2573,7 +2574,7 @@ Update `PROJECT.md` (current stage), `progress.md` (evidence) and commit in the 
 2. In-session checks, each as ✅/❌ with a fix in the same table:
    - Figma MCP: `whoami` answers and the seat can edit.
    - Artifact: `Artifact action=quickstart intent=other` lists a Design System type.
-   - Browser: `preview_start` with the `ds-harness` configuration opens `http://localhost:<port>/harness/_sweep.html` (build the harness first: `python3 ds/scripts/build_harness.py`).
+   - Browser: `preview_start` with the `ds-harness` configuration serves `ds/`; navigate to `http://localhost:<port>/project/README.md` and see it load. (The sweep page appears with the first previews at stage 5.)
    - Figma fonts: in a read-only `use_figma`, `figma.listAvailableFontsAsync()` contains the intended font family; if not, record a Google stand-in to use.
 3. With the user, fill the empty fields of `CLIENT.md` (contact, language, package, rounds, deadlines) and `PROJECT.md` (entry mode, platform profile, target sizes).
 4. Ask the user for the Figma file URL for this client; record it in `PROJECT.md` and `design/figma/figma-state.json` (`fileKey`, `fileUrl`).

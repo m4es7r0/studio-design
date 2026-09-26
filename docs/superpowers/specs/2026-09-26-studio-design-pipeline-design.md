@@ -171,7 +171,8 @@ directions and style tiles.
 
 Packages (`docs/packages.md`):
 
-- «ДС»: stages 0–5, 7 (components plus 1–2 templates), 8, 9.
+- «ДС»: stages 0–9; stage 6 codes only the 1–2 key templates from the layout budget, and
+  stage 7 builds the components and those templates.
 - «ДС + экраны»: all stages; stages 6 and 7 cover every registry screen.
 - «ДС + код для разработки»: not built.
 
@@ -314,7 +315,7 @@ Client communication:
   - body text samples keep units with numbers through no-break spaces;
   - every page gets a Doc frame; `figma-state.json` is updated after every call.
 - Artifact (`docs/rules/artifact.md`): create the Design System type once through
-  quickstart; publish with `root` = `design/ds`, `file_path` = `project/design-system.json`,
+  quickstart; publish with `root` = `ds` (the session runs in `design/`), `file_path` = `project/design-system.json`,
   only changed files in `files`; `.d.ts` as `text/plain`; read the index before publishing;
   stamp `lastChange`; previews carry the `@dsCard` marker; uploaded assets are
   `/_blob/<id>` and the harness maps them to `ds/upload/`.
