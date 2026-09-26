@@ -1,0 +1,7 @@
+{
+  "examples": [
+    { "id": "revenue", "name": "Выручка", "type": "money", "value": 462000000000, "delta": -18000000000 },
+    { "id": "users", "name": "Пользователи", "type": "count", "unit": "чел.", "value": 1250000, "delta": 41000 },
+    { "id": "conversion", "name": "Конверсия", "type": "percent", "value": 4.5, "delta": 0.7 }
+  ]
+}
