@@ -34,6 +34,10 @@ class HarnessTest(unittest.TestCase):
         self.assertIn('../upload/city.jpg', page)
         with open(os.path.join(ds, 'harness', '_sweep.html'), encoding='utf-8') as f:
             self.assertIn('window.SWEEP_PAGES = ["Demo"]', f.read())
+        with open(os.path.join(ds, 'harness', '_measure.html'), encoding='utf-8') as f:
+            measure = f.read()
+        self.assertIn('<pre id="result">measuring…</pre>', measure)
+        self.assertIn('<script src="../scripts/measure.js"></script>', measure)
         with open(os.path.join(ds, 'harness', 'tokens.css'), encoding='utf-8') as f:
             self.assertIn(':root, [data-theme="light"]', f.read())
 

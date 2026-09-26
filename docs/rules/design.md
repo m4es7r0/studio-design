@@ -7,6 +7,6 @@
 - Sample values come from `ds/fixtures/` through the format functions; missing data is marked `—` or «to confirm», never invented. No invented metrics in client-visible copy.
 - Contrast: WCAG AA (4.5:1 body text, 3:1 large text and UI parts).
 - One primary action per view; the brand colour signals, it does not fill surfaces.
-- Checks are committed scripts (`ds/scripts/sweep.js`, `figma/audit.js`, `ds/scripts/check_format.js`, `fonts/font_check.py`); never write a check ad hoc in a session.
+- Checks are committed scripts (`ds/scripts/sweep.js`, `ds/scripts/measure.js`, `figma/audit.js`, `ds/scripts/check_format.js`, `fonts/font_check.py`); never write a check ad hoc in a session.
 - Client material (briefs, references, fonts, screenshots, client names) stays in the client container. The studio repository, including `docs/lessons.md`, holds none; write lessons without client names.
 - Stage references name every input file; agents never search for inputs on their own.

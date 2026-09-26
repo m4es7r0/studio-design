@@ -1,5 +1,5 @@
-"""Builds harness/<Name>.html for every component preview (real tokens, fonts, bundle and React)
-and harness/_sweep.html for scripts/sweep.js.
+"""Builds harness/<Name>.html for every component preview (real tokens, fonts, bundle and React),
+harness/_sweep.html for scripts/sweep.js and harness/_measure.html for scripts/measure.js.
 Usage: python3 ds/scripts/build_harness.py [--ds DIR]"""
 import argparse
 import json
@@ -18,6 +18,13 @@ SWEEP_PAGE = '''<!doctype html>
 <body><pre id="result">running…</pre>
 <script>window.SWEEP_PAGES = __PAGES__;</script>
 <script src="../scripts/sweep.js"></script>
+</body></html>
+'''
+
+MEASURE_PAGE = '''<!doctype html>
+<html><head><meta charset="utf-8"><title>measuring…</title></head>
+<body style="margin:0"><pre id="result">measuring…</pre>
+<script src="../scripts/measure.js"></script>
 </body></html>
 '''
 
@@ -75,6 +82,8 @@ def build(ds):
         names.append(name)
     with open(os.path.join(out, '_sweep.html'), 'w', encoding='utf-8') as f:
         f.write(SWEEP_PAGE.replace('__PAGES__', json.dumps(names)))
+    with open(os.path.join(out, '_measure.html'), 'w', encoding='utf-8') as f:
+        f.write(MEASURE_PAGE)
     return names
 
 
