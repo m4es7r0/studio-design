@@ -2,6 +2,7 @@
 # Creates a client container from template/.
 # Usage: new-client.sh <slug> [--name "Client name"] [--port N]
 # CLIENTS_DIR overrides the parent folder (default ~/job/clients).
+# The name goes into JSON files, so it may not contain " or \ (use «» quotes).
 set -euo pipefail
 repo="$(cd "$(dirname "$0")/.." && pwd)"
 clients="${CLIENTS_DIR:-$HOME/job/clients}"
@@ -17,6 +18,7 @@ while [ $# -gt 0 ]; do
     *) usage ;;
   esac
 done
+case "$name" in *'"'*|*'\'*) echo "refusing: --name must not contain \" or \\; use «» quotes" >&2; exit 2 ;; esac
 dst="$clients/$slug"
 if [ -e "$dst" ]; then echo "refusing: $dst already exists" >&2; exit 1; fi
 if [ -z "$port" ]; then

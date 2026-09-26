@@ -15,4 +15,8 @@ assert_eq "" "$left" "no template tokens left"
 assert_eq 1 "$(git -C "$c" rev-list --count HEAD)" "one initial commit"
 "$REPO/scripts/new-client.sh" acme-shop >/dev/null 2>&1; assert_eq 1 $? "refuses an existing client"
 "$REPO/scripts/new-client.sh" 9lives >/dev/null 2>&1; assert_eq 2 $? "rejects a slug that starts with a digit"
+err="$("$REPO/scripts/new-client.sh" quoted --name 'Say "Hi"' 2>&1 >/dev/null)"; assert_eq 2 $? "rejects a double quote in the name"
+assert_contains "$err" "use «» quotes" "hints at «» quotes"
+"$REPO/scripts/new-client.sh" slashed --name 'Back\slash' >/dev/null 2>&1; assert_eq 2 $? "rejects a backslash in the name"
+assert_eq "" "$(ls "$tmp" | grep -E '^(quoted|slashed)$' || true)" "no container for a rejected name"
 finish
