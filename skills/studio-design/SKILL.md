@@ -13,7 +13,7 @@ repository is `~/job/studio-design`; its docs are the rules you follow.
 - Work only inside the client container. Never write client material into `~/job/studio-design`.
 - Paths written `design/...` are relative to the client container `~/job/clients/<slug>/`. The session's working directory is `design/`, so commands use paths relative to it (`ds/scripts/...`, `figma/...`).
 - Every stage follows its reference in `references/`. Read it before starting the stage; it names every input file. Do not look for inputs it does not name.
-- A stage ends only when its gate passes and `design/progress.md` records the evidence (command output, screenshot paths, decision entries). Evidence is pasted, never typed from memory.
+- A stage ends only when its gate passes and `design/progress.md` records the evidence (command output, the names of the previews or Figma nodes you looked at with your verdict, decision entries). Evidence is pasted, never typed from memory.
 - 🧑 checkpoints: prepare the material and the questions in the client's language, then stop. The user takes them to the client; answers go to `design/decisions.md`.
 - Decisions belong to the user and the client. Agents report; you decide nothing on the client's behalf.
 - Files, code and comments are in English; everything the client reads is in the client's language (`CLIENT.md`).

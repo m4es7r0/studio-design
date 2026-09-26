@@ -6,13 +6,14 @@
 
 ## Steps
 1. Run `~/job/studio-design/scripts/preflight.sh`; paste its output into `design/progress.md` › Preflight.
-2. In-session checks, each as ✅/❌ with a fix in the same table:
+2. Run `npm install --no-audit --no-fund` in `design/` (needed by `npm run check:types`); record ✅/❌ as a row of the Preflight table.
+3. In-session checks, each as ✅/❌ with a fix in the same table:
    - Figma MCP: `whoami` answers and the seat can edit.
    - Artifact: `Artifact action=quickstart intent=other` lists a Design System type.
    - Browser: `preview_start` with the `ds-harness` configuration serves `ds/`; navigate to `http://localhost:<port>/project/README.md` and see it load. (The sweep page appears with the first previews at stage 5.)
    - Figma fonts: in a read-only `use_figma`, `figma.listAvailableFontsAsync()` contains the intended font family; if not, record a Google stand-in to use.
-3. With the user, fill the empty fields of `CLIENT.md` (contact, language, package, rounds, deadlines) and `PROJECT.md` (entry mode, platform profile, target sizes).
-4. Ask the user for the Figma file URL for this client; record it in `PROJECT.md` and `design/figma/figma-state.json` (`fileKey`, `fileUrl`).
+4. With the user, fill the empty fields of `CLIENT.md` (contact, language, package, rounds, deadlines) and `PROJECT.md` (entry mode, platform profile, target sizes).
+5. Ask the user for the Figma file URL for this client; record it in `PROJECT.md` and `design/figma/figma-state.json` (`fileKey`, `fileUrl`).
 
 ## Outputs
 - `design/progress.md` › Preflight table; filled `CLIENT.md` and `PROJECT.md`; `figma-state.json` with the file key.
