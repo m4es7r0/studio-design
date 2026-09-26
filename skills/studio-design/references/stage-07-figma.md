@@ -2,9 +2,10 @@
 
 ## Inputs
 - `design/figma/figma-state.json`, `design/figma/prelude.js`, `design/figma/prelude.project.js`, `design/figma/audit.js`, `design/ds/project/*`, `design/ds/fixtures/formatted.json`, `~/job/studio-design/docs/rules/figma.md`.
+- `design/decisions.md` (the «Figma stand-in» row: the Google family the Figma typography uses).
 
 ## Steps
-1. Foundations: variables (colour, spacing, typography with the stand-in font), text and effect styles, named by the conventions in `prelude.js`; audit the Foundations page.
+1. Foundations: variables (colour, spacing, typography with the stand-in font from `decisions.md`), text and effect styles, named by the conventions in `prelude.js`; audit the Foundations page.
 2. Dispatch `studio-design-figma-builder` once per batch, in the order of stage 5: one component set or one screen per call, audit after each batch, screenshots back.
 3. Look at every screenshot yourself; write the names of the sets and screens looked at, with verdicts, in `progress.md`; send defects back to the builder as a new batch.
 4. Templates and screens from stage 6, with fixture values and the background assets (`upload_assets`).
