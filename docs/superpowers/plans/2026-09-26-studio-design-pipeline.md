@@ -2887,12 +2887,12 @@ contact anyone, never edit anything outside the output path you are given.
 
 ## Input (from the dispatch prompt)
 
-- The brief files (PDF, DOCX, MD, images) and, for PDFs, the extracted `pages/page-NNN.txt` and `.png`.
+- The brief files (PDF, DOCX, MD, images) and, for PDFs, the extracted `pages/<pdf-stem>/page-NNN.txt` and `.png` (one folder per PDF).
 - The output path, normally `design/brief/tz-analysis.md`.
 
 ## Output
 
-Write the output file with these sections, each item with a page reference `(p. N)`:
+Write the output file with these sections, each item with a page reference `(<file>, p. N)`:
 
 1. **Summary** — product, audience, platform, what is delivered.
 2. **Screen registry** — every screen and state, with the brief's IDs (for example S-01, P-07).
@@ -2939,7 +2939,7 @@ You review; you never edit files, publish, or decide. The dispatcher decides wha
 ## Output
 
 Findings ranked by severity (blocker, major, minor). Each: where (registry ID, file or screen),
-what is wrong, evidence (measurement, screenshot path, brief page, rule), a suggested fix.
+what is wrong, evidence (measurement, the preview or node you looked at, brief page, rule), a suggested fix.
 End with counts per severity. If nothing is wrong, say so and list what you checked.
 ```
 
