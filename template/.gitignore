@@ -1,0 +1,4 @@
+design/ds/harness/
+node_modules/
+__pycache__/
+.DS_Store

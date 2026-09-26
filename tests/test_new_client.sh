@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/lib.sh"
+tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
+export CLIENTS_DIR="$tmp"
+out="$("$REPO/scripts/new-client.sh" acme-shop --name "Акме Шоп" --port 5301)"; assert_eq 0 $? "creates a client"
+c="$tmp/acme-shop"
+assert_file "$c/CLIENT.md"
+assert_file "$c/design/PROJECT.md"
+assert_file "$c/design/brief/README.md"
+assert_contains "$(cat "$c/CLIENT.md")" "# Акме Шоп" "client name substituted"
+assert_contains "$(cat "$c/design/PROJECT.md")" "AcmeShopUI" "namespace derived from the slug"
+assert_contains "$(cat "$c/design/.claude/launch.json")" '"port": 5301 }' "port substituted"
+left="$(grep -rIE '__(CLIENT_SLUG|CLIENT_NAME|NAMESPACE|DATE|PORT)__' "$c" || true)"
+assert_eq "" "$left" "no template tokens left"
+assert_eq 1 "$(git -C "$c" rev-list --count HEAD)" "one initial commit"
+"$REPO/scripts/new-client.sh" acme-shop >/dev/null 2>&1; assert_eq 1 $? "refuses an existing client"
+"$REPO/scripts/new-client.sh" 9lives >/dev/null 2>&1; assert_eq 2 $? "rejects a slug that starts with a digit"
+finish
