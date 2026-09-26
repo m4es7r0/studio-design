@@ -33,7 +33,7 @@ if command -v npx >/dev/null 2>&1; then ok "npx"; else no "npx" "reinstall Node.
 if git config user.name >/dev/null && git config user.email >/dev/null; then ok "git identity"
 else no "git identity" "git config --global user.name 'Name' && git config --global user.email 'mail'"; fi
 if command -v lsof >/dev/null 2>&1; then ok "lsof"; else no "lsof" "install lsof (new-client.sh uses it to pick a free harness port)"; fi
-for s in studio-design grilling hallmark design-agent mobile-design-patterns auditing-accessibility; do
+for s in studio-design grilling hallmark design-agent mobile-design-patterns; do
   if [ -f "$home/skills/$s/SKILL.md" ]; then ok "skill $s"; else no "skill $s" "$(fix_skill "$s")"; fi
 done
 if ls "$home"/plugins/cache/*/figma/*/skills/figma-use/SKILL.md >/dev/null 2>&1; then ok "Figma plugin skills (figma-use, figma-generate-library, figma-generate-design)"

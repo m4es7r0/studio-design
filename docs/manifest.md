@@ -43,7 +43,7 @@ checks the local part; stage 0 of `studio-design` checks the in-session part.
 | `hallmark` | `~/.agents/skills/hallmark` (linked into `~/.claude/skills`) | 2, 4, 8 | directions, anti-slop rules, audit |
 | `design-agent` | `~/design-intelligence-agent`, `scripts/install.sh` | 2 | references, patterns, redesign audit |
 | `mobile-design-patterns` | `~/design-intelligence-agent` | 3, 5 | mobile profile |
-| `auditing-accessibility` | `~/.claude/skills/auditing-accessibility` | 8 | contrast, touch targets, focus |
+| `auditing-accessibility` | `~/.claude/skills/auditing-accessibility` | 8, optional | real-device audit of a built mobile app only; not required by preflight |
 | `figma:figma-use`, `figma:figma-generate-library`, `figma:figma-generate-design` | Claude Code plugin `figma` | 7 | Plugin API rules, library build, screen build |
 | `artifact-design`, `artifact-capabilities` | loaded through the artifact quickstart | 4 | page contract of the artifact |
 
