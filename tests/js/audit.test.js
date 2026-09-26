@@ -24,11 +24,27 @@ test('a clean page has no findings', () => {
 
 test('unbound paints, unstyled text and default names are found outside instances only', () => {
   const inst = n('INSTANCE', 'Button', {}, [n('RECTANGLE', 'Rectangle 3', { fills: [SOLID(false)] })]);
-  const page = n('PAGE', 'P', {}, [n('FRAME', 'Frame 12', { fills: [SOLID(false)] }, [n('TEXT', 'label', { textStyleId: '' }), n('TEXT', 'mixed', { textStyleId: MIXED }), inst])]);
+  const mixed = n('TEXT', 'mixed', { textStyleId: MIXED, getStyledTextSegments: () => [{ characters: 'ab', start: 0, end: 2, textStyleId: '' }] });
+  const page = n('PAGE', 'P', {}, [n('FRAME', 'Frame 12', { fills: [SOLID(false)] }, [n('TEXT', 'label', { textStyleId: '' }), mixed, inst])]);
   const r = auditNodes(page.children, MIXED);
   assert.equal(r.unboundPaints.length, 1);
   assert.equal(r.unstyledText.length, 2);
   assert.deepEqual(r.defaultNames.map((s) => s.split(' ').slice(1).join(' ')), ['Frame 12']);
+});
+
+test('mixed text whose every range has a text style is not unstyled', () => {
+  const segments = () => [{ characters: 'a', start: 0, end: 1, textStyleId: 'S:1' }, { characters: 'b', start: 1, end: 2, textStyleId: 'S:2' }];
+  const page = n('PAGE', 'P', {}, [n('FRAME', 'Card', {}, [n('TEXT', 'mixed', { textStyleId: MIXED, getStyledTextSegments: segments })])]);
+  assert.deepEqual(auditNodes(page.children, MIXED).unstyledText, []);
+});
+
+test('text inside a hidden ancestor is not reported as clipped', () => {
+  const overflowing = () => n('TEXT', '10', { textStyleId: 'S:1', absoluteBoundingBox: { x: 213, y: 0, width: 22, height: 24 } });
+  const clip = (children) => n('FRAME', 'ticks', { clipsContent: true, absoluteBoundingBox: { x: 0, y: 0, width: 232, height: 24 } }, children);
+  const hidden = (children) => n('FRAME', 'wrapper', { visible: false, absoluteBoundingBox: { x: 0, y: 0, width: 270, height: 24 } }, children);
+  const inner = n('FRAME', 'RoundChart', {}, [clip([hidden([overflowing()])])]);
+  const outer = n('FRAME', 'RoundChart', {}, [hidden([clip([overflowing()])])]);
+  assert.deepEqual(auditNodes([inner, outer], MIXED).clippedText, []);
 });
 
 test('overlapping variants are found', () => {

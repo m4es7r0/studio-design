@@ -1,6 +1,6 @@
 // Figma page audit. Paste into use_figma, then: return await auditPage('<pageId>');
 // Read-only. Outside instances it checks: unbound SOLID paints, text without a text style, default
-// layer names, text clipped by a clipping ancestor. Per component set or standalone component:
+// layer names, visible text clipped by a clipping ancestor. Per component set or standalone component:
 // overlapping variants, layers whose property references differ between variants, component
 // properties no layer references.
 const DEFAULT_NAME = /^(Frame|Rectangle|Text|Component|Group|Ellipse|Vector|Instance|Line|Polygon|Star|Section)( \d+)?$/;
@@ -15,6 +15,15 @@ function clippingAncestor(node) {
   let p = node.parent;
   while (p && p.type !== 'PAGE' && p.type !== 'DOCUMENT') { if (p.clipsContent === true) return p; p = p.parent; }
   return null;
+}
+function hidden(node) {
+  for (let x = node; x && x.type !== 'PAGE' && x.type !== 'DOCUMENT'; x = x.parent) if (x.visible === false) return true;
+  return false;
+}
+// A mixed text style is unstyled only if some range has no text style.
+function unstyled(text, MIXED) {
+  if (text.textStyleId === MIXED) return text.getStyledTextSegments(['textStyleId']).some((s) => !s.textStyleId);
+  return !text.textStyleId;
 }
 function layerPath(node, root) {
   const parts = [];
@@ -67,8 +76,8 @@ function auditNodes(roots, MIXED) {
       for (const p of ps) if (p.type === 'SOLID' && p.visible !== false && !(p.boundVariables && p.boundVariables.color)) out.unboundPaints.push(id + ' ' + prop);
     }
     if (x.type === 'TEXT') {
-      if (!x.textStyleId || x.textStyleId === MIXED) out.unstyledText.push(id);
-      const clip = x.visible === false ? null : clippingAncestor(x);
+      if (unstyled(x, MIXED)) out.unstyledText.push(id);
+      const clip = hidden(x) ? null : clippingAncestor(x);
       if (clip) {
         const a = box(x), b = box(clip);
         if (a.x < b.x - 0.5 || a.y < b.y - 0.5 || a.x + a.width > b.x + b.width + 0.5 || a.y + a.height > b.y + b.height + 0.5) out.clippedText.push(id + ' in ' + clip.name);
