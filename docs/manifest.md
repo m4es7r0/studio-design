@@ -52,7 +52,7 @@ checks the local part; stage 0 of `studio-design` checks the in-session part.
 | Agent | Source | Stages |
 |---|---|---|
 | `tz-analyst` | this repository | 1 (and fact-finder for `grilling`) |
-| `design-scout` | `~/design-intelligence-agent` | 2 |
+| `design-scout` | `~/design-intelligence-agent` | 2 (dispatched with `model: opus`; its own frontmatter says sonnet) |
 | `studio-design-reviewer` | this repository | 2, 5, 6, 8, 9 |
 | `studio-design-figma-builder` | this repository | 7 |
 

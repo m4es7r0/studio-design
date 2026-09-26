@@ -45,10 +45,12 @@ Skip stages the package excludes (`~/job/studio-design/docs/packages.md`). Packa
 
 ## Agents
 
-- `tz-analyst` — facts from the brief (stage 1; fact-finder for `grilling`).
-- `design-scout` — references (stage 2).
-- `studio-design-reviewer` — independent review at stages 2, 5, 6, 8, 9.
-- `studio-design-figma-builder` — Figma batches (stage 7), one at a time.
+| Agent | When | What to pass | How to dispatch |
+|---|---|---|---|
+| `tz-analyst` | stage 1 and `grilling` fact lookups | the brief files, `design/brief/pages/*/`, the output path `design/brief/tz-analysis.md` given as an absolute path (`~/job/clients/<slug>/design/brief/tz-analysis.md`); for a lookup, the question and the source files | as is |
+| `design-scout` | stage 2 | `mode: survey` (or `mode: quick` for one decision), the platform profile path, the Summary of `design/brief/tz-analysis.md` | with `model: opus` (its own frontmatter says sonnet) |
+| `studio-design-reviewer` | stages 2, 5, 6, 8, 9 | the scope, `design/brief/tz-analysis.md`, the profile path, the harness URL `http://localhost:<port>/harness/<Name>.html` (port from `PROJECT.md`) with the preview names, the round file at stage 9 | as is |
+| `studio-design-figma-builder` | stage 7 | batch names, code paths, file key, page names, `design/figma/*`, `design/ds/fixtures/formatted.json` | with `run_in_background: false`; make no Figma call of your own until it returns |
 
 Agent reports are not shown to the user; relay what matters. Give every agent exact input and
 output paths.

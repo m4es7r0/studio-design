@@ -12,7 +12,7 @@
 5. Look at every new preview in the browser; fix what looks wrong.
 6. `npm run check:types`.
 7. Publish the batch (`rules/artifact.md`).
-8. After the last batch, dispatch `studio-design-reviewer` for registry coverage and states.
+8. After the last batch, dispatch `studio-design-reviewer` (payload: SKILL.md › Agents) for registry coverage and states.
 
 ## Outputs
 - Components in the bundle, previews, READMEs, types; a published artifact version per batch.

@@ -6,7 +6,7 @@
 ## Steps
 1. Create `design/revisions/round-NN/source/` with the list as received and `round-NN.md` with a table: number, where (registry ID), request, the client's words.
 2. Triage every item: ✅ accept, 🔁 accept with a change, ⚠️ push back (reason, evidence, alternative), ❓ question, 💰 outside the package; add its impact (which tokens, components, screens change).
-3. Dispatch `studio-design-reviewer` for a second opinion on UX risk; merge its view.
+3. Dispatch `studio-design-reviewer` (payload: SKILL.md › Agents) for a second opinion on UX risk; merge its view.
 4. Run `grilling` with the user over ⚠️, ❓ and 💰 items (output file `design/decisions.md`).
 5. Write the reply to the client in their language; the user sends it. 🧑 Wait for confirmation.
 6. Implement: code, sweep, Figma, audit; before and after screenshots.

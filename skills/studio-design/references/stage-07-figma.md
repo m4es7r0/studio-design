@@ -6,8 +6,8 @@
 
 ## Steps
 1. Foundations: variables (colour, spacing, typography with the stand-in font from `decisions.md`), text and effect styles, named by the conventions in `prelude.js`; audit the Foundations page.
-2. Dispatch `studio-design-figma-builder` once per batch, in the order of stage 5: one component set or one screen per call, audit after each batch, screenshots back.
-3. Look at every screenshot yourself; write the names of the sets and screens looked at, with verdicts, in `progress.md`; send defects back to the builder as a new batch.
+2. Dispatch `studio-design-figma-builder` (payload: SKILL.md › Agents) once per batch, in the order of stage 5: one component set or one screen per call, audit after each batch, screenshots back.
+3. Look at every screenshot yourself; write the names of the sets and screens looked at, with verdicts, in `progress.md`; send defects back to the builder as a new batch (payload: SKILL.md › Agents).
 4. Templates and screens from stage 6, with fixture values and the background assets (`upload_assets`).
 5. Keep `figma-state.json` current; one Doc frame per page.
 
