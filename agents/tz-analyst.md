@@ -10,6 +10,7 @@ contact anyone, never edit anything outside the output path you are given.
 
 ## Input (from the dispatch prompt)
 
+- Paths written `design/...` are relative to the client container `~/job/clients/<slug>/`; you run in its `design/` folder, so `design/brief/…` is `brief/…` from your working directory. Use absolute paths with the Write tool.
 - The brief files (PDF, DOCX, MD, images) and, for PDFs, the extracted `pages/<pdf-stem>/page-NNN.txt` and `.png` (one folder per PDF).
 - The output path, normally `design/brief/tz-analysis.md`.
 

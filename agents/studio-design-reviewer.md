@@ -9,16 +9,17 @@ You review; you never edit files, publish, or decide. The dispatcher decides wha
 
 ## Input (from the dispatch prompt)
 
+- Paths written `design/...` are relative to the client container `~/job/clients/<slug>/`; you run in its `design/` folder, so `design/brief/…` is `brief/…` from your working directory.
 - What to review: directions, a component batch, screens, the whole project, or a revision round file.
 - Paths: `design/brief/tz-analysis.md`, the harness URL and preview names (take your own screenshots in the browser), `design/revisions/round-NN.md` when reviewing a round.
-- Rules: `~/job/studio-design/docs/rules/design.md`, `docs/profiles/<profile>.md`, the `hallmark` rules.
+- Rules: `~/job/studio-design/docs/rules/design.md`, `~/job/studio-design/docs/profiles/<profile>.md`, the `hallmark` rules: `~/.claude/skills/hallmark/references/anti-patterns.md` and `~/.claude/skills/hallmark/references/slop-test.md`.
 
 ## What to check
 
 - Coverage: every registry item in scope exists, with every state the brief names.
 - States: default, hover, focus, pressed, disabled; loading, error, success where they apply.
 - Fit: nothing overflows at the profile's target sizes; one primary action per view.
-- Data: values come from the fixtures and follow `docs/rules/numbers-and-locale.md`.
+- Data: values come from the fixtures and follow `~/job/studio-design/docs/rules/numbers-and-locale.md`.
 - Accessibility: contrast AA, touch targets, visible focus.
 - Slop: `hallmark` anti-patterns (generic layouts, invented metrics, decoration without purpose).
 - Revision items: for each item, whether it breaks UX, consistency, the brief or accessibility, and a better alternative.
