@@ -14,7 +14,7 @@ INJECT = ('<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href=
           '<script src="../project/components/bundle.js"></script>')
 
 SWEEP_PAGE = '''<!doctype html>
-<html><head><meta charset="utf-8"><title>Sweep</title></head>
+<html><head><meta charset="utf-8"><title>sweeping…</title></head>
 <body><pre id="result">running…</pre>
 <script>window.SWEEP_PAGES = __PAGES__;</script>
 <script src="../scripts/sweep.js"></script>

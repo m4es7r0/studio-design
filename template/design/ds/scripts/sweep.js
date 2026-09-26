@@ -1,6 +1,8 @@
 /* Sweep: loads every harness page in a 1920 px iframe and reports JS errors, real overflows and
-   empty roots. Open harness/_sweep.html and read #result; its first line is «SWEEP OK: …» or
-   «SWEEP FAIL: …». Wrap an intentional overhang in [data-sweep-ignore]. */
+   empty roots; a page the server does not return or that does not finish loading is an error, and
+   a sweep over zero pages fails. Open harness/_sweep.html, wait until the title starts with «SWEEP»
+   and read #result; its first line is «SWEEP OK: …» or «SWEEP FAIL: …». Wrap an intentional
+   overhang in [data-sweep-ignore]. Pages without #root (static pages) are allowed. */
 (function () {
   var TOL = 4;
 
@@ -20,8 +22,19 @@
     return true;
   }
 
+  // The first line of the report. Zero pages, or fewer results than pages, never pass.
+  function summarize(results, pageCount) {
+    if (!pageCount) return 'SWEEP FAIL: 0 pages';
+    var bad = results.filter(function (r) { return r.errors.length || r.overflows.length || r.empty; });
+    var errs = results.reduce(function (a, r) { return a + r.errors.length; }, 0);
+    var over = results.reduce(function (a, r) { return a + r.overflows.length; }, 0);
+    var empty = results.filter(function (r) { return r.empty; }).length;
+    var ok = !bad.length && results.length === pageCount;
+    return (ok ? 'SWEEP OK: ' : 'SWEEP FAIL: ') + pageCount + ' pages, ' + errs + ' errors, ' + over + ' overflows, ' + empty + ' empty';
+  }
+
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { isRealOverflow: isRealOverflow, inFlowFits: inFlowFits, TOL: TOL };
+    module.exports = { isRealOverflow: isRealOverflow, inFlowFits: inFlowFits, summarize: summarize, TOL: TOL };
     return;
   }
 
@@ -49,11 +62,22 @@
     return c + ': ' + (e.textContent || '').trim().slice(0, 40) + ' (' + (e.scrollWidth - e.clientWidth) + 'px)';
   }
 
-  function checkPage(name) {
+  // Asks the server for the page first, so a missing page is an error rather than an empty pass.
+  async function checkPage(name) {
+    try {
+      var res = await fetch(name + '.html', { method: 'HEAD', cache: 'no-store' });
+      if (!res.ok) return { page: name, errors: ['sweep: HTTP ' + res.status], overflows: [], empty: false };
+    } catch (err) {
+      return { page: name, errors: ['sweep: ' + err.message], overflows: [], empty: false };
+    }
+    return loadPage(name);
+  }
+
+  function loadPage(name) {
     return new Promise(function (resolve) {
       var f = document.createElement('iframe');
       f.style.cssText = 'position:fixed;left:0;top:0;width:1920px;height:1200px;opacity:0;pointer-events:none';
-      var done = false;
+      var loaded = false, done = false;
       function finish() {
         if (done) return;
         done = true;
@@ -62,6 +86,7 @@
           try {
             var d = f.contentDocument, w = f.contentWindow;
             r.errors = (w.__errs || []).slice();
+            if (!loaded || d.readyState !== 'complete') r.errors.push('sweep: page did not finish loading');
             var root = d.getElementById('root');
             r.empty = !!root && root.children.length === 0;
             var els = d.querySelectorAll('body *');
@@ -80,7 +105,7 @@
           resolve(r);
         }, 700);
       }
-      f.onload = finish;
+      f.onload = function () { loaded = true; finish(); };
       setTimeout(finish, 6000);
       f.src = name + '.html?sweep=' + Date.now();
       document.body.appendChild(f);
@@ -91,10 +116,7 @@
     var pages = window.SWEEP_PAGES || [], results = [];
     for (var i = 0; i < pages.length; i++) results.push(await checkPage(pages[i]));
     var bad = results.filter(function (r) { return r.errors.length || r.overflows.length || r.empty; });
-    var errs = results.reduce(function (a, r) { return a + r.errors.length; }, 0);
-    var over = results.reduce(function (a, r) { return a + r.overflows.length; }, 0);
-    var empty = results.filter(function (r) { return r.empty; }).length;
-    var head = (bad.length ? 'SWEEP FAIL: ' : 'SWEEP OK: ') + pages.length + ' pages, ' + errs + ' errors, ' + over + ' overflows, ' + empty + ' empty';
+    var head = summarize(results, pages.length);
     document.getElementById('result').textContent = head + '\n' + JSON.stringify(bad, null, 2);
     document.title = head;
   }
