@@ -1,5 +1,7 @@
 # Figma rules
 
+Paths written `design/...` are relative to the client container `~/job/clients/<slug>/`; the session runs in `design/`, so commands use paths relative to it.
+
 Read before every `use_figma` call. Load the `figma:figma-use` skill (and `figma-generate-library` for components, `figma-generate-design` for screens).
 
 ## Workflow per batch
