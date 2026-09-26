@@ -363,7 +363,7 @@ cd ~/job/studio-design && git add -A && git commit -m "Add Pipeline Skeleton And
 - [ ] **Step 1: Write `requirements.txt`, `scripts/setup-python.sh`, `scripts/py`**
 
 ```
-pymupdf>=1.24
+pymupdf>=1.24.3
 fonttools>=4.50
 brotli>=1.1
 ```
@@ -376,7 +376,7 @@ repo="$(cd "$(dirname "$0")/.." && pwd)"
 python3 -m venv "$repo/.venv"
 "$repo/.venv/bin/pip" install --quiet --upgrade pip
 "$repo/.venv/bin/pip" install --quiet -r "$repo/requirements.txt"
-"$repo/.venv/bin/python" -c "import fitz, fontTools, brotli; print('studio python ready')"
+"$repo/.venv/bin/python" -c "import pymupdf, fontTools, brotli; print('studio python ready')"
 ```
 
 ```bash
@@ -419,7 +419,7 @@ import sys
 import tempfile
 import unittest
 
-import fitz
+import pymupdf as fitz
 
 from helpers import REPO
 
@@ -465,7 +465,7 @@ import argparse
 import os
 import sys
 
-import fitz
+import pymupdf as fitz
 
 
 def extract(pdf, out, dpi=110, images=False):
@@ -2088,7 +2088,7 @@ fix_agent() {
   esac
 }
 
-if [ -x "$py" ] && "$py" -c 'import fitz, fontTools, brotli' >/dev/null 2>&1; then ok "studio python (PyMuPDF, fontTools, brotli)"
+if [ -x "$py" ] && "$py" -c 'import pymupdf, fontTools, brotli' >/dev/null 2>&1; then ok "studio python (PyMuPDF, fontTools, brotli)"
 else no "studio python (PyMuPDF, fontTools, brotli)" "$repo/scripts/setup-python.sh"; fi
 nv="$(node --version 2>/dev/null | sed 's/^v//' | cut -d. -f1)"
 if [ -n "$nv" ] && [ "$nv" -ge 20 ]; then ok "node $(node --version)"; else no "node 20 or newer" "install Node.js 20+ from https://nodejs.org"; fi
