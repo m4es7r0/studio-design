@@ -13,21 +13,35 @@
     return true;
   }
 
+  // True when every in-flow right edge stays within the box, so the overhang comes only from
+  // absolute or fixed descendants or pseudo-elements.
+  function inFlowFits(rights, boxRight) {
+    for (var i = 0; i < rights.length; i++) if (rights[i] > boxRight + TOL) return false;
+    return true;
+  }
+
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { isRealOverflow: isRealOverflow, TOL: TOL };
+    module.exports = { isRealOverflow: isRealOverflow, inFlowFits: inFlowFits, TOL: TOL };
     return;
   }
 
-  function absoluteOnly(e, w) {
-    var right = e.getBoundingClientRect().right + TOL, any = false;
-    for (var k = 0; k < e.children.length; k++) {
-      if (e.children[k].getBoundingClientRect().right > right) {
-        any = true;
-        var pos = w.getComputedStyle(e.children[k]).position;
-        if (pos !== 'absolute' && pos !== 'fixed') return false;
+  // Collects the right edges of e's in-flow descendants: skips absolute and fixed subtrees,
+  // descends only through overflow-x: visible boxes, and measures text nodes with a Range.
+  function inFlowRights(e, w, out) {
+    for (var n = e.firstChild; n; n = n.nextSibling) {
+      if (n.nodeType === 1) {
+        var cs = w.getComputedStyle(n);
+        if (cs.position === 'absolute' || cs.position === 'fixed') continue;
+        out.push(n.getBoundingClientRect().right);
+        if (cs.overflowX === 'visible') inFlowRights(n, w, out);
+      } else if (n.nodeType === 3 && /\S/.test(n.nodeValue)) {
+        var range = e.ownerDocument.createRange();
+        range.selectNodeContents(n);
+        var rects = range.getClientRects();
+        for (var k = 0; k < rects.length; k++) out.push(rects[k].right);
       }
     }
-    return any;
+    return out;
   }
 
   function label(e) {
@@ -55,7 +69,7 @@
               var e = els[i], cs = w.getComputedStyle(e);
               var m = { scrollWidth: e.scrollWidth, clientWidth: e.clientWidth, textOverflow: cs.textOverflow, overflowX: cs.overflowX, display: cs.display, ignored: !!e.closest('[data-sweep-ignore]'), absoluteOnly: false };
               if (isRealOverflow(m)) {
-                m.absoluteOnly = absoluteOnly(e, w);
+                m.absoluteOnly = inFlowFits(inFlowRights(e, w, []), e.getBoundingClientRect().right);
                 if (isRealOverflow(m)) r.overflows.push(label(e));
               }
             }
