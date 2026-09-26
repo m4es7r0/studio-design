@@ -2923,7 +2923,7 @@ You review; you never edit files, publish, or decide. The dispatcher decides wha
 ## Input (from the dispatch prompt)
 
 - What to review: directions, a component batch, screens, the whole project, or a revision round file.
-- Paths: `design/brief/tz-analysis.md`, the harness URL or preview names, screenshots, `design/revisions/round-NN.md` when reviewing a round.
+- Paths: `design/brief/tz-analysis.md`, the harness URL and preview names (take your own screenshots in the browser), `design/revisions/round-NN.md` when reviewing a round.
 - Rules: `~/job/studio-design/docs/rules/design.md`, `docs/profiles/<profile>.md`, the `hallmark` rules.
 
 ## What to check
@@ -2976,7 +2976,7 @@ artifact, never decide design questions — report them.
 
 - Node IDs created and changed, per page.
 - The audit result per page (paste the returned JSON).
-- Screenshot URLs or saved paths.
+- The names of the sets and screens you took a `get_screenshot` of, each with what you saw (screenshots are not files; the name and verdict are the evidence).
 - Anything you could not do, and why (for example an override the API refuses).
 ```
 
