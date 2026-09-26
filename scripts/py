@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Runs the studio Python (.venv) with the pipeline's dependencies. STUDIO_PY overrides it.
+repo="$(cd "$(dirname "$0")/.." && pwd)"
+py="${STUDIO_PY:-$repo/.venv/bin/python}"
+[ -x "$py" ] || { echo "No studio Python at $py. Run $repo/scripts/setup-python.sh" >&2; exit 3; }
+exec "$py" "$@"
