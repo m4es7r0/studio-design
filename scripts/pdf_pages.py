@@ -4,7 +4,7 @@ import argparse
 import os
 import sys
 
-import fitz
+import pymupdf as fitz
 
 
 def extract(pdf, out, dpi=110, images=False):

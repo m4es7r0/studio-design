@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 
-import fitz
+import pymupdf as fitz
 
 from helpers import REPO
 
