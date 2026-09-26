@@ -54,8 +54,7 @@ A git repository of skills that belong to no project. Each skill is symlinked in
 `~/design-intelligence-agent`.
 
 First resident: `grilling`, forked from `mattpocock/skills`
-(`skills/productivity/grilling/SKILL.md`, the copy currently installed in
-`~/job/funnel.fun/.agents/skills/grilling`). The skill's `README.md` records the upstream
+(`skills/productivity/grilling/SKILL.md`). The skill's `UPSTREAM.md` records the upstream
 repository, path, commit and license, and lists our changes, so upstream updates can be
 merged by hand. Our changes:
 
