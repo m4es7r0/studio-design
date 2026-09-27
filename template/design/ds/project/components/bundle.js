@@ -1,6 +1,7 @@
 /* @ds-bundle: {"format":4,"namespace":"__NAMESPACE__","components":[]} */
 (function () {
   'use strict';
+  var React = window.React;
 
   function assign(target) {
     for (var i = 1; i < arguments.length; i++) {

@@ -6,7 +6,7 @@
 
 ## Steps
 1. Split the registry into batches of related components; per batch:
-2. Add the components to `bundle.js` and `bundle.css`, types to `index.d.ts`, a README per component, preview specs to `previews_spec.py`.
+2. Add the components to `bundle.js` and `bundle.css`, types to `index.d.ts`, a README per component, preview specs to `previews_spec.py`; register each component in the `@ds-bundle` header and on `window.<NS>` (`docs/rules/artifact.md` › File formats).
 3. `python3 ds/scripts/gen_previews.py <Names>` and `python3 ds/scripts/build_harness.py`.
 4. Start the harness (`preview_start` ds-harness), open `harness/_sweep.html`, wait until the page title starts with `SWEEP`, then `get_page_text`.
 5. Look at every new preview in the browser; fix what looks wrong.
