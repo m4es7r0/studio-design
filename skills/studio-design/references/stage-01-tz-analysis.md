@@ -6,7 +6,7 @@
 ## Steps
 1. For every PDF in `design/brief/`: `~/job/studio-design/scripts/py ~/job/studio-design/scripts/pdf_pages.py brief/<file>.pdf brief/pages/<file-stem> --images` (one folder per PDF, so pages never overwrite each other); copy useful embedded images to `refs/`.
 2. Dispatch `tz-analyst` (payload: SKILL.md › Agents) with the brief files and `design/brief/pages/*/`; it writes `design/brief/tz-analysis.md`.
-3. Read the analysis. Run `grilling` with the user over the decisions it leaves open, passing: output file `design/decisions.md`, client-questions file `design/questions.md`, fact-finder `tz-analyst` with the brief files as sources (payload: SKILL.md › Agents).
+3. Read the analysis. Run `grilling` with the user over the decisions it leaves open, passing: output file `design/decisions.md`, client-questions file `design/questions.md`, fact-finder `tz-analyst` with the brief files as sources (payload: SKILL.md › Agents); tell `grilling` to append rows in the `| Date | Source | Decision |` table of `design/decisions.md`.
 4. Show the user `design/questions.md`; they send it to the client. 🧑 Stop until the answers come back; record each in `decisions.md` and move it to «Answered».
 
 ## Outputs

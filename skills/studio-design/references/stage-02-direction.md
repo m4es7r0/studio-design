@@ -9,7 +9,7 @@
 3. Entry mode «redesign»: audit the current product through `design-agent` (screenshots into `design/refs/`), then one direction that keeps recognisability.
 4. Entry mode «existing DS»: import the client's tokens and components through Figma MCP `get_libraries`, `search_design_system`, `get_variable_defs`; write what exists and what is missing into `design/directions/existing-ds.md`; then go to stage 3.
 5. Dispatch `studio-design-reviewer` (payload: SKILL.md › Agents) on the directions (slop, fit to the brief); fix what it finds.
-6. 🧑 The user shows the directions to the client; record the choice in `decisions.md`; keep the rejected ones in `design/directions/`.
+6. 🧑 The user shows the directions to the client; record the choice in `decisions.md`; keep the rejected ones in `design/directions/`. Remind the user that the artifact and the Figma file are private until they grant the client access.
 
 ## Outputs
 - `design/directions/*.md`, a style tile or directions page in the artifact.

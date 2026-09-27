@@ -11,10 +11,12 @@ repository is `~/job/studio-design`; its docs are the rules you follow.
 ## Invariants
 
 - Work only inside the client container. Never write client material into `~/job/studio-design`.
+- The only write into `~/job/studio-design` is a lesson in `docs/lessons.md` (stage 9, no client names), committed there.
 - Paths written `design/...` are relative to the client container `~/job/clients/<slug>/`. The session's working directory is `design/`, so commands use paths relative to it (`ds/scripts/...`, `figma/...`).
+- Bare `docs/…` means `~/job/studio-design/docs/…` and bare `rules/…` means `~/job/studio-design/docs/rules/…`; `CLIENT.md` is `../CLIENT.md` from `design/`.
 - Every stage follows its reference in `references/`. Read it before starting the stage; it names every input file. Do not look for inputs it does not name.
 - A stage ends only when its gate passes and `design/progress.md` records the evidence (command output, the names of the previews or Figma nodes you looked at with your verdict, decision entries). Evidence is pasted, never typed from memory.
-- 🧑 checkpoints: prepare the material and the questions in the client's language, then stop. The user takes them to the client; answers go to `design/decisions.md`.
+- 🧑 checkpoints: prepare the material and the questions in the client's language, then stop. The user takes them to the client; answers go to `design/decisions.md`. At every 🧑 checkpoint remind the user that the artifact and the Figma file are private until they grant the client access.
 - Decisions belong to the user and the client. Agents report; you decide nothing on the client's behalf.
 - Files, code and comments are in English; everything the client reads is in the client's language (`CLIENT.md`).
 - Rules: `~/job/studio-design/docs/rules/*.md`. Tools: `docs/manifest.md`. Pitfalls: `docs/lessons.md`.
