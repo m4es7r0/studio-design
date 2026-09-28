@@ -31,3 +31,18 @@ test('a zone past the left or top edge does not fit', () => {
 test('an empty zone list is not ok', () => {
   assert.deepEqual(zoneVerdict([], 1920, 1080), { ok: false, outside: [] });
 });
+
+test('width only (h null or undefined): a zone far below the fold fits', () => {
+  const zones = [zone('hero', 0, 0, 1440, 800), zone('footer', 0, 2700, 1440, 300)];
+  assert.deepEqual(zoneVerdict(zones, 1440, null), { ok: true, outside: [] });
+  assert.deepEqual(zoneVerdict(zones, 1440, undefined), { ok: true, outside: [] });
+});
+
+test('width only: a zone past the right edge does not fit', () => {
+  const zones = [zone('hero', 0, 0, 1440, 800), zone('pricing', 0, 1800, 1441, 900)];
+  assert.deepEqual(zoneVerdict(zones, 1440, null), { ok: false, outside: ['pricing'] });
+});
+
+test('width only: an empty zone list is not ok', () => {
+  assert.deepEqual(zoneVerdict([], 1440, null), { ok: false, outside: [] });
+});

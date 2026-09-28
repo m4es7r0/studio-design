@@ -6,7 +6,7 @@
 ## Steps
 1. Package «ДС»: the 1–2 templates from the layout budget. Package «ДС + экраны»: every screen and state in the registry.
 2. Build each screen as a preview page with the `page` card marker and its width; every value from the fixtures; mark its rails, zones and free areas with `data-zone="<zone name>"`.
-3. Measure every screen at every target size with `harness/_measure.html?page=<Name>&w=<W>&h=<H>` (wait until the page title starts with `MEASURE`, then `get_page_text`); paste the first line and the JSON of every run into `progress.md`.
+3. Measure every screen at every target size with `harness/_measure.html?page=<Name>&w=<W>&h=<H>` (wait until the page title starts with `MEASURE`, then `get_page_text`); paste the first line and the JSON of every run into `progress.md`. On profiles whose pages scroll (web-landing, web-product, mobile), measure the full page with `h=auto` (width only), and use a fixed `h` only for zones that must stay inside the viewport (shell, rails, sticky bars, the first screen); mark only those zones with `data-zone` on the fixed-height run, or run the fixed-height check on a preview of that part alone.
 4. Sweep, look, publish; dispatch `studio-design-reviewer` (payload: SKILL.md › Agents) on the screens.
 
 ## Outputs

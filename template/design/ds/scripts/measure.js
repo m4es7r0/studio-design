@@ -2,16 +2,21 @@
    element's rect relative to the iframe viewport. Open harness/_measure.html?page=<Name>&w=<px>&h=<px>,
    wait until the title starts with «MEASURE», then read #result: the first line is
    «MEASURE OK: <Name> at <w>×<h>, <N> zones» or «MEASURE FAIL: <Name> at <w>×<h>: <reason>»,
-   then the zones as JSON (numbers rounded to 0.1 px). */
+   then the zones as JSON (numbers rounded to 0.1 px).
+   h=auto measures a page that scrolls: the iframe is w wide and 1000 px high for layout, only the left
+   and right edges are checked, and the first line reads «<Name> at <w>×auto». */
 (function () {
   var TOL = 0.5;
 
   // A zone fits when its rect stays inside the w×h viewport (half a pixel of rounding allowed).
+  // h null or undefined means width only: the left and right edges are checked, top and bottom are not.
   function zoneVerdict(zones, w, h) {
-    var outside = [];
+    var widthOnly = h === null || h === undefined, outside = [];
     for (var i = 0; i < zones.length; i++) {
       var z = zones[i];
-      if (!(z.left >= -TOL && z.top >= -TOL && z.right <= w + TOL && z.bottom <= h + TOL)) outside.push(z.name);
+      var fitsX = z.left >= -TOL && z.right <= w + TOL;
+      var fitsY = widthOnly || (z.top >= -TOL && z.bottom <= h + TOL);
+      if (!(fitsX && fitsY)) outside.push(z.name);
     }
     return { ok: zones.length > 0 && outside.length === 0, outside: outside };
   }
@@ -31,14 +36,15 @@
 
   function run() {
     var q = new URLSearchParams(location.search);
-    var name = q.get('page'), w = parseInt(q.get('w'), 10), h = parseInt(q.get('h'), 10);
-    if (!name || !(w > 0) || !(h > 0)) {
-      report('MEASURE FAIL: use _measure.html?page=<Name>&w=<px>&h=<px>');
+    var name = q.get('page'), w = parseInt(q.get('w'), 10), auto = q.get('h') === 'auto';
+    var h = auto ? null : parseInt(q.get('h'), 10);
+    if (!name || !(w > 0) || !(auto || h > 0)) {
+      report('MEASURE FAIL: use _measure.html?page=<Name>&w=<px>&h=<px> or h=auto');
       return;
     }
-    var at = name + ' at ' + w + '×' + h;
+    var at = name + ' at ' + w + '×' + (auto ? 'auto' : h);
     var f = document.createElement('iframe');
-    f.style.cssText = 'display:block;border:0;margin:0;padding:0;width:' + w + 'px;height:' + h + 'px';
+    f.style.cssText = 'display:block;border:0;margin:0;padding:0;width:' + w + 'px;height:' + (auto ? 1000 : h) + 'px';
     var loaded = false, done = false;
     function measure() {
       if (done) return;
