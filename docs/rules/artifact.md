@@ -5,6 +5,7 @@ Paths written `design/...` are relative to the client container `~/job/clients/<
 - Create the artifact once, at stage 2 (at stage 4 when entry mode «existing DS» skips stage 2), through `Artifact action=quickstart` and the Design System type; record its URL in `PROJECT.md` and `CLIENT.md`.
 - After creation read the artifact's `project/design-system.json` and merge it; never publish without its `createdOnFiles` field, or the type opens the system read-only.
 - Opening the page can save a new version by itself; read the index (the artifact's `project/design-system.json`) before every publish and merge, never overwrite fields the type owns.
+- On first open the page saves a new version by itself (service files such as `tokens.css`, `manifest.json`, and a service tail at the end of the README). Publish the README only when you really changed it, and only after reading the published README and merging your edit into it; otherwise the service tail is overwritten.
 - Publish with `url` = the artifact, `root` = `ds`, `file_path` = `project/design-system.json`, and only changed files in `files`.
 - `index.d.ts` is published with `contentType: text/plain`.
 - Stamp `lastChange` (by, via, at, note) in `design-system.json` on every publish.
