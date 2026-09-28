@@ -13,7 +13,7 @@
 6. Fonts: every proposed face comes from Google Fonts (the only host the artifact CSP and the Figma MCP runtime allow) and passes `font_check.py` before the client sees it; for Cyrillic projects start from `~/job/studio-design/docs/fonts-cyrillic.md`. For each proposed face run `~/job/studio-design/scripts/py ~/job/studio-design/scripts/cyrillic_fonts.py --family "<Family>"` (it prints `font_check.py`'s ✅/❌ line and exits 1 on a miss). Then, for every proposed face, run a read-only `use_figma` (load `figma:figma-use` first; the file key is in `design/figma/figma-state.json`) with `figma.listAvailableFontsAsync()` and confirm that the weights the direction uses exist in the Figma MCP runtime, with their exact style names (`rules/figma.md`); otherwise the client would pick a direction whose Figma library needs a stand-in. The «In Figma» column of `fonts-cyrillic.md` is a dated capture and does not replace this check. Record both results in the direction file.
 7. The directions page is a `page` preview card in the group «Направления» (the group name in the client's language), written through `ds/previews_spec.py`, `gen_previews.py` and `build_harness.py` (the reviewer opens it in the harness), and published (`rules/artifact.md`). It shows:
    - each direction has its own first screen and its own signature section, not one skeleton in three skins;
-   - a states strip: field default / focus / error, primary button pressed / submitting, success, one disclosure open and closed;
+   - a states strip: field default / focus / error, primary button pressed / submitting, success, one disclosure open and closed; a focused invalid field shows both the error and the focus ring;
    - unconfirmed facts are marked (dashed outline and «уточнить» in the client's language); nothing is invented;
    - the riskiest element is also shown at 375;
    - draft copy is tagged as a draft;
@@ -34,4 +34,4 @@
 - Brand colour is a signal, not a surface (`rules/design.md`).
 - hallmark's worked examples are not style references (`rules/design.md`).
 - Screenshots need the Browser pane visible; if it is hidden, ask the user to show it (a background tab may not repaint).
-- `docs/lessons.md` 12 (fonts checked at stage 2), 14 (what the directions page shows) and 17 (Figma font check at stage 2).
+- `docs/lessons.md` 12 (fonts checked at stage 2), 14 (what the directions page shows), 17 (Figma font check at stage 2) and 18 (error ring and focus ring).
