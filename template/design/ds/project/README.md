@@ -1,5 +1,7 @@
 # __CLIENT_NAME__ UI Kit
 
+If the client sees the artifact before stage 4, put a short note in the client's language at the top of this file.
+
 Namespace `__NAMESPACE__`. Principles, colour roles and component rules are written at stage 4.
 
 ## Numbers

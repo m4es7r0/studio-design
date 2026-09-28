@@ -17,9 +17,9 @@ test('fixtures render through the format functions', () => {
   const c = makeClient();
   execFileSync('node', [path.join(c, 'design/ds/scripts/format_fixtures.js')]);
   const out = JSON.parse(fs.readFileSync(path.join(c, 'design/ds/fixtures/formatted.json'), 'utf8'));
-  assert.deepEqual(out.examples.revenue, { name: 'Выручка', value: '462 млрд ₽', delta: '−18 млрд ₽' });
-  assert.equal(out.examples.users.value, '1 250 000 чел.');
-  assert.equal(out.examples.users.delta, '+41 000 чел.');
-  assert.equal(out.examples.conversion.value, '4,5 %');
-  assert.equal(out.examples.conversion.delta, '+0,7 п.п.');
+  // U+202F groups thousands, U+00A0 joins the unit.
+  assert.deepEqual(out.examples.price, { name: 'Цена', value: '1\u202F490\u00A0₽', delta: null });
+  assert.equal(out.examples.weight.value, '250\u00A0г');
+  assert.equal(out.examples.orders.value, '12\u202F500\u00A0шт.');
+  assert.equal(out.examples.orders.delta, '+800\u00A0шт.');
 });

@@ -1,0 +1,9 @@
+{
+  "_note": "Draft copy for previews. Mark drafts; the client's approved copy replaces them.",
+  "examples": {
+    "headline": "Заголовок до шестидесяти знаков, чтобы проверить перенос строки",
+    "button": "Основное действие",
+    "error": "Проверьте поле: здесь сообщение об ошибке",
+    "consent": "Нажимая кнопку, вы соглашаетесь с условиями обработки данных"
+  }
+}
