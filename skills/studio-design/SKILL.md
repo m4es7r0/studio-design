@@ -51,7 +51,7 @@ Skip stages the package excludes (`~/job/studio-design/docs/packages.md`). Packa
 | Agent | When | What to pass | How to dispatch |
 |---|---|---|---|
 | `tz-analyst` | stage 1 and `grilling` fact lookups | the brief files, `design/brief/pages/*/`, the output path `design/brief/tz-analysis.md` given as an absolute path (`~/job/clients/<slug>/design/brief/tz-analysis.md`); for a lookup, the question and the source files | as is |
-| `design-scout` | stage 2 | `mode: survey` (or `mode: quick` for one decision), the platform profile path, the Summary of `design/brief/tz-analysis.md` | with `model: opus` (its own frontmatter says sonnet) |
+| `design-scout` | stage 2 | `mode: survey` (or `mode: quick` for one decision), the platform profile path, the Summary of `design/brief/tz-analysis.md`, and «open your own browser tab» | with `model: opus` (its own frontmatter says sonnet), before the harness is in use |
 | `studio-design-reviewer` | stages 2, 5, 6, 8, 9 | the scope, `design/brief/tz-analysis.md`, the profile path, the harness URL `http://localhost:<port>/harness/<Name>.html` (port from `PROJECT.md`) with the preview names, the round file at stage 9 | as is |
 | `studio-design-figma-builder` | stage 7 | batch names, code paths, file key, page names, `design/figma/*`, `design/ds/fixtures/formatted.json` | with `run_in_background: false`; make no Figma call of your own until it returns |
 
