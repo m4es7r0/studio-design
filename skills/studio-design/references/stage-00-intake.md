@@ -13,7 +13,7 @@
    - Figma MCP: `whoami` shows a Full seat and a read-only `use_figma` lists the file's pages (file from step 4). Any authenticated Figma MCP server that offers `use_figma` will do (the claude.ai connector works without an interactive login; the Claude Code plugin server needs OAuth); record which server was used in the Preflight table. Take the page list from `use_figma`, not `get_metadata` (it can omit pages).
    - Artifact: `Artifact action=quickstart intent=other` lists a Design System type.
    - Browser: `preview_start` with the `ds-harness` configuration serves `ds/`; navigate to `http://localhost:<port>/index.html` and see it load. (`http.server` serves `.md` without a charset, so Cyrillic in `/project/README.md` breaks; the sweep page appears with the first previews at stage 5.)
-   - Figma fonts: only for font families known at intake (entry mode «brand book» or «existing DS»): in a read-only `use_figma` (load `figma:figma-use` first), `figma.listAvailableFontsAsync()` contains the family; if not, record a Google stand-in to use. Otherwise record «deferred to stage 4» in the Preflight table.
+   - Figma fonts: only for font families known at intake (entry mode «brand book» or «existing DS»): in a read-only `use_figma` (load `figma:figma-use` first), `figma.listAvailableFontsAsync()` contains the family; if not, record a Google stand-in to use. Otherwise (entry mode «from scratch» or «redesign») record «deferred to stage 2» in the Preflight table: stage 2 checks every proposed face.
 
 ## Outputs
 - `design/progress.md` › Preflight table; filled `CLIENT.md` and `PROJECT.md` with the Figma file URL; `figma-state.json` with the file key and URL.
@@ -25,4 +25,4 @@
 - None beyond the manifest checks.
 
 ## Pitfalls
-- `docs/lessons.md` 2 (Figma fonts), 10 (own container) and 13 (session root).
+- `docs/lessons.md` 2 (Figma fonts), 10 (own container), 13 (session root) and 17 (Figma font check at stage 2).

@@ -1,8 +1,8 @@
 # Stage 2 · Direction 🧑
 
 ## Inputs
-- `design/brief/tz-analysis.md`, `design/decisions.md` (audience, the «Moved to stage 2» rows), `design/PROJECT.md` (entry mode, profile), `design/refs/`.
-- `~/job/studio-design/docs/rules/{design,artifact}.md`, `~/job/studio-design/docs/fonts-cyrillic.md` (Cyrillic projects), `~/job/studio-design/scripts/cyrillic_fonts.py`.
+- `design/brief/tz-analysis.md`, `design/decisions.md` (audience, the «Moved to stage 2» rows), `design/PROJECT.md` (entry mode, profile), `design/refs/`, `design/figma/figma-state.json` (Figma file key for the font check).
+- `~/job/studio-design/docs/rules/{design,artifact,figma}.md`, `~/job/studio-design/docs/fonts-cyrillic.md` (Cyrillic projects), `~/job/studio-design/scripts/cyrillic_fonts.py`.
 
 ## Steps
 1. Every entry mode except «existing DS»: create the artifact from the Design System type (`Artifact action=quickstart intent=other`), read its `project/design-system.json` and merge it into `ds/project/design-system.json` (keep `createdOnFiles`); record the URL in `PROJECT.md` and `CLIENT.md`.
@@ -10,7 +10,7 @@
 3. Entry mode «brand book»: colours, fonts and logo are fixed; write one direction that sets colour roles, contrast and tone.
 4. Entry mode «redesign»: audit the current product through `design-agent` (screenshots into `design/refs/`), then one direction that keeps recognisability.
 5. Entry mode «existing DS»: import the client's tokens and components through Figma MCP `get_libraries`, `search_design_system`, `get_variable_defs`; write what exists and what is missing into `design/directions/existing-ds.md`; then go to stage 3.
-6. Fonts: every proposed face comes from Google Fonts (the only host the artifact CSP and the Figma MCP runtime allow) and passes `font_check.py` before the client sees it; for Cyrillic projects start from `~/job/studio-design/docs/fonts-cyrillic.md`. For each proposed face run `~/job/studio-design/scripts/py ~/job/studio-design/scripts/cyrillic_fonts.py --family "<Family>"` (it prints `font_check.py`'s ✅/❌ line and exits 1 on a miss) and paste its output into the direction file.
+6. Fonts: every proposed face comes from Google Fonts (the only host the artifact CSP and the Figma MCP runtime allow) and passes `font_check.py` before the client sees it; for Cyrillic projects start from `~/job/studio-design/docs/fonts-cyrillic.md`. For each proposed face run `~/job/studio-design/scripts/py ~/job/studio-design/scripts/cyrillic_fonts.py --family "<Family>"` (it prints `font_check.py`'s ✅/❌ line and exits 1 on a miss). Then, for every proposed face, run a read-only `use_figma` (load `figma:figma-use` first; the file key is in `design/figma/figma-state.json`) with `figma.listAvailableFontsAsync()` and confirm that the weights the direction uses exist in the Figma MCP runtime, with their exact style names (`rules/figma.md`); otherwise the client would pick a direction whose Figma library needs a stand-in. The «In Figma» column of `fonts-cyrillic.md` is a dated capture and does not replace this check. Record both results in the direction file.
 7. The directions page is a `page` preview card in the group «Направления» (the group name in the client's language), written through `ds/previews_spec.py`, `gen_previews.py` and `build_harness.py` (the reviewer opens it in the harness), and published (`rules/artifact.md`). It shows:
    - each direction has its own first screen and its own signature section, not one skeleton in three skins;
    - a states strip: field default / focus / error, primary button pressed / submitting, success, one disclosure open and closed;
@@ -25,13 +25,13 @@
 - `design/directions/*.md`; the artifact (URL in `PROJECT.md` and `CLIENT.md`) with the directions page or a style tile; the merged `ds/project/design-system.json`.
 
 ## Gate
-- The chosen direction is recorded in `decisions.md`; every proposed face passed `font_check.py`; the last `studio-design-reviewer` pass reports no blocker or major findings, or the user saw the open list before the client checkpoint. For entry mode «existing DS»: `design/directions/existing-ds.md` is written and the user's confirmation of the import is recorded in `decisions.md`.
+- The chosen direction is recorded in `decisions.md`; every proposed face passed `font_check.py` and its Figma font check is recorded in the direction file; the last `studio-design-reviewer` pass reports no blocker or major findings, or the user saw the open list before the client checkpoint. For entry mode «existing DS»: `design/directions/existing-ds.md` is written and the user's confirmation of the import is recorded in `decisions.md`.
 
 ## Skills and agents
-- `hallmark`, `design-agent`, `artifact-design` and `artifact-capabilities` (through the quickstart), agents `design-scout`, `studio-design-reviewer`.
+- `hallmark`, `design-agent`, `artifact-design` and `artifact-capabilities` (through the quickstart), `figma:figma-use` (font check), agents `design-scout`, `studio-design-reviewer`.
 
 ## Pitfalls
 - Brand colour is a signal, not a surface (`rules/design.md`).
 - hallmark's worked examples are not style references (`rules/design.md`).
 - Screenshots need the Browser pane visible; if it is hidden, ask the user to show it (a background tab may not repaint).
-- `docs/lessons.md` 12 (fonts checked at stage 2) and 14 (what the directions page shows).
+- `docs/lessons.md` 12 (fonts checked at stage 2), 14 (what the directions page shows) and 17 (Figma font check at stage 2).

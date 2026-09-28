@@ -18,6 +18,7 @@ Read before every `use_figma` call. Load the `figma:figma-use` skill (and `figma
 - Mutating calls strictly sequential; one page switch per call.
 - A file's page list comes from `use_figma` (`figma.root.children`), not `get_metadata`, which can omit pages.
 - The MCP runtime sees only Google Fonts: text styles bind to Typography variables with a Google stand-in; the user swaps the family to the real font at the very end, because edits fail after the swap.
+- Take style names from `figma.listAvailableFontsAsync()`; they differ between families (for example «SemiBold» in Ysabeau Office, «Semi Bold» in Inter).
 - A bound paint carries the resolved variable colour (`P.paint`), otherwise an instance override equal to the main value renders the placeholder colour.
 - `clone()` of a variant drops property references: re-bind TEXT, BOOLEAN and INSTANCE_SWAP references after cloning; the audit reports misses as `refMismatch`.
 - Hidden instance sublayers take no fill writes: set fills before hiding.

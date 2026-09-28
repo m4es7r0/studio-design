@@ -19,3 +19,4 @@ rule or stage reference it names.
 14. The first directions page drew 11 major review findings → the stage reference did not say what the page must show → the directions-page checklist and the review stop rule (`stage-02-direction.md`).
 15. The client's «ок» delivered no data → decision questions and material requests shared one list → Decisions and Materials in `questions.md` (`rules/client.md`, template).
 16. The layout budget missed an overflow inside a block → zones spanned the whole column → text zones fit their content, buttons and prices `nowrap` (`stage-03-layout-budget.md`).
+17. Whether a face existed in the Figma runtime was known only after the client chose a direction → the Figma font check sat at stage 4 → check every proposed face at stage 2 (`stage-02-direction.md`, `stage-00-intake.md`).
