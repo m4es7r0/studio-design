@@ -1,6 +1,6 @@
 # Studio Design pipeline: design
 
-Date: 2026-09-26. Status: approved in chat, awaiting review of this file.
+Date: 2026-09-26. Status: approved by the user; implemented on branch `pipeline-v1` (plan and SDD ledger record the rulings made during implementation).
 Source effort: the «Симулятор мэра» design system (`~/job/mayor-sim-design`, artifact
 https://claude.ai/artifact/5XmWyh1fP5rtEPJkY6scxC, Figma file NcLeuYB80bCP3OAeY2qIlh).
 
@@ -171,7 +171,8 @@ directions and style tiles.
 
 Packages (`docs/packages.md`):
 
-- «ДС»: stages 0–5, 7 (components plus 1–2 templates), 8, 9.
+- «ДС»: stages 0–9; stage 6 codes only the 1–2 key templates from the layout budget, and
+  stage 7 builds the components and those templates.
 - «ДС + экраны»: all stages; stages 6 and 7 cover every registry screen.
 - «ДС + код для разработки»: not built.
 
@@ -216,7 +217,7 @@ Skills:
 | `hallmark` | 2, 4, 8 | directions, anti-slop rules, audit |
 | `design-agent` + agent `design-scout` | 2 | references, patterns, redesign audit |
 | `mobile-design-patterns` | 3, 5 | mobile profile |
-| `auditing-accessibility` | 8 | contrast, touch targets, focus |
+| `auditing-accessibility` | 8, optional | real-device audit of a built mobile app only (it drives a phone); not a preflight requirement. Stage 8 always runs the `hallmark` audit plus contrast and target-size figures measured in the harness |
 | `figma:figma-use`, `figma:figma-generate-library`, `figma:figma-generate-design` | 7 | API rules, library build, screen build |
 | `artifact-design`, `artifact-capabilities` | 4 | loaded through the artifact quickstart |
 
@@ -238,7 +239,7 @@ format with evidence. Model: Opus.
 | `tz-analyst` | 1; fact-finder for grilling | `design/brief/` sources → `brief/tz-analysis.md`, extracted images in `refs/` | decides, fills gaps with guesses |
 | `design-scout` (exists) | 2 | question + platform profile → evidence package | picks the direction |
 | `studio-design-reviewer` | 2, 5, 6, 8, 9 | artifact, screenshots, `tz-analysis.md`, round file → ranked findings with evidence: registry coverage, states, UX, hallmark slop, UX risk of client правки | fixes anything |
-| `studio-design-figma-builder` | 7 | one batch from code + `figma-state.json` + `docs/rules/figma.md` → the batch in Figma, `audit.js` output, node IDs, screenshots, updated ledger | runs in parallel with any other Figma call; edits code |
+| `studio-design-figma-builder` | 7 | one batch from code + `figma-state.json` + `docs/rules/figma.md` → the batch in Figma, `audit.js` output, node IDs, the names of the nodes it looked at with verdicts, updated ledger (no `tools:` line: Figma MCP tool names carry an install-specific prefix, so it inherits all tools) | runs in parallel with any other Figma call; edits code |
 
 Code components stay in the main session (user feedback lands there; `bundle.js` is one
 file, parallel implementers would conflict).
@@ -314,7 +315,7 @@ Client communication:
   - body text samples keep units with numbers through no-break spaces;
   - every page gets a Doc frame; `figma-state.json` is updated after every call.
 - Artifact (`docs/rules/artifact.md`): create the Design System type once through
-  quickstart; publish with `root` = `design/ds`, `file_path` = `project/design-system.json`,
+  quickstart; publish with `root` = `ds` (the session runs in `design/`), `file_path` = `project/design-system.json`,
   only changed files in `files`; `.d.ts` as `text/plain`; read the index before publishing;
   stamp `lastChange`; previews carry the `@dsCard` marker; uploaded assets are
   `/_blob/<id>` and the harness maps them to `ds/upload/`.
@@ -324,12 +325,13 @@ Client communication:
 
 | Script | From Mayor | Change |
 |---|---|---|
-| `figma/prelude.js` | IDs of Mayor variables hard-coded | look up variables, text styles, effect styles, `_Frame` and icons by name at run time; no IDs |
+| `figma/prelude.js` | IDs of Mayor variables hard-coded | look up variables, text styles and effect styles by name at run time; components (including `_Frame` and icons) come by ID from `figma-state.json`; no hard-coded IDs |
 | `figma/audit.js` | written inline each time | per page: unbound SOLID paints, unstyled text and default names outside instances; overlapping variants in a set; layers whose property references differ between variants of one set; component properties referenced by no layer; text clipped by a clipping ancestor; returns counts and samples |
 | `ds/scripts/sweep.js` | inline iframe loop | harness page `_sweep.html` loads every preview, reports JS errors, overflow over 4 px and empty roots; `data-sweep-ignore` for intentional overhangs; result readable with `get_page_text` |
 | `ds/scripts/build_harness.py`, `gen_previews.py` | Mayor names | project name and namespace from `PROJECT.md` and `design-system.json` |
 | `ds/scripts/check_format.js` | Mayor cases | cases from `ds/fixtures/format-cases.json` |
 | `ds/scripts/format_fixtures.js` | new | renders `fixtures/*.json` through the DS format functions into `fixtures/formatted.json` |
+| `ds/scripts/measure.js` | measured by hand in the session | harness page `_measure.html?page=<Name>&w=<px>&h=<px>` loads one page at an exact size and reports every `[data-zone]` rect and whether it fits; used by the fit gates of stages 3, 6 and 8 |
 | `fonts/font_check.py` | `patch_font.py` was Pixel Code specific | checks glyph coverage for ₽, U+00A0, U+202F, U+2212, Cyrillic; patching stays optional per project |
 
 Mayor Sim is the reference implementation: stage references point to

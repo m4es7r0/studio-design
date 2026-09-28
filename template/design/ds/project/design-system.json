@@ -1,0 +1,12 @@
+{
+  "v": 3,
+  "layout": "files",
+  "title": "__CLIENT_NAME__ UI Kit",
+  "namespace": "__NAMESPACE__",
+  "libraries": [{ "name": "react", "version": "18" }, { "name": "react-dom", "version": "18" }],
+  "sections": {},
+  "groups": [],
+  "assetGroups": {},
+  "blobs": {},
+  "docs": { "readme": "project/README.md", "sections": [] }
+}

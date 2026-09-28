@@ -363,7 +363,7 @@ cd ~/job/studio-design && git add -A && git commit -m "Add Pipeline Skeleton And
 - [ ] **Step 1: Write `requirements.txt`, `scripts/setup-python.sh`, `scripts/py`**
 
 ```
-pymupdf>=1.24
+pymupdf>=1.24.3
 fonttools>=4.50
 brotli>=1.1
 ```
@@ -376,7 +376,7 @@ repo="$(cd "$(dirname "$0")/.." && pwd)"
 python3 -m venv "$repo/.venv"
 "$repo/.venv/bin/pip" install --quiet --upgrade pip
 "$repo/.venv/bin/pip" install --quiet -r "$repo/requirements.txt"
-"$repo/.venv/bin/python" -c "import fitz, fontTools, brotli; print('studio python ready')"
+"$repo/.venv/bin/python" -c "import pymupdf, fontTools, brotli; print('studio python ready')"
 ```
 
 ```bash
@@ -419,7 +419,7 @@ import sys
 import tempfile
 import unittest
 
-import fitz
+import pymupdf as fitz
 
 from helpers import REPO
 
@@ -465,7 +465,7 @@ import argparse
 import os
 import sys
 
-import fitz
+import pymupdf as fitz
 
 
 def extract(pdf, out, dpi=110, images=False):
@@ -2088,7 +2088,7 @@ fix_agent() {
   esac
 }
 
-if [ -x "$py" ] && "$py" -c 'import fitz, fontTools, brotli' >/dev/null 2>&1; then ok "studio python (PyMuPDF, fontTools, brotli)"
+if [ -x "$py" ] && "$py" -c 'import pymupdf, fontTools, brotli' >/dev/null 2>&1; then ok "studio python (PyMuPDF, fontTools, brotli)"
 else no "studio python (PyMuPDF, fontTools, brotli)" "$repo/scripts/setup-python.sh"; fi
 nv="$(node --version 2>/dev/null | sed 's/^v//' | cut -d. -f1)"
 if [ -n "$nv" ] && [ "$nv" -ge 20 ]; then ok "node $(node --version)"; else no "node 20 or newer" "install Node.js 20+ from https://nodejs.org"; fi
@@ -2510,6 +2510,7 @@ repository is `~/job/studio-design`; its docs are the rules you follow.
 ## Invariants
 
 - Work only inside the client container. Never write client material into `~/job/studio-design`.
+- Paths written `design/...` are relative to the client container `~/job/clients/<slug>/`. The session's working directory is `design/`, so commands use paths relative to it (`ds/scripts/...`, `figma/...`).
 - Every stage follows its reference in `references/`. Read it before starting the stage; it names every input file. Do not look for inputs it does not name.
 - A stage ends only when its gate passes and `design/progress.md` records the evidence (command output, screenshot paths, decision entries). Evidence is pasted, never typed from memory.
 - 🧑 checkpoints: prepare the material and the questions in the client's language, then stop. The user takes them to the client; answers go to `design/decisions.md`.
@@ -2573,7 +2574,7 @@ Update `PROJECT.md` (current stage), `progress.md` (evidence) and commit in the 
 2. In-session checks, each as ✅/❌ with a fix in the same table:
    - Figma MCP: `whoami` answers and the seat can edit.
    - Artifact: `Artifact action=quickstart intent=other` lists a Design System type.
-   - Browser: `preview_start` with the `ds-harness` configuration opens `http://localhost:<port>/harness/_sweep.html` (build the harness first: `python3 ds/scripts/build_harness.py`).
+   - Browser: `preview_start` with the `ds-harness` configuration serves `ds/`; navigate to `http://localhost:<port>/project/README.md` and see it load. (The sweep page appears with the first previews at stage 5.)
    - Figma fonts: in a read-only `use_figma`, `figma.listAvailableFontsAsync()` contains the intended font family; if not, record a Google stand-in to use.
 3. With the user, fill the empty fields of `CLIENT.md` (contact, language, package, rounds, deadlines) and `PROJECT.md` (entry mode, platform profile, target sizes).
 4. Ask the user for the Figma file URL for this client; record it in `PROJECT.md` and `design/figma/figma-state.json` (`fileKey`, `fileUrl`).
@@ -2886,12 +2887,12 @@ contact anyone, never edit anything outside the output path you are given.
 
 ## Input (from the dispatch prompt)
 
-- The brief files (PDF, DOCX, MD, images) and, for PDFs, the extracted `pages/page-NNN.txt` and `.png`.
+- The brief files (PDF, DOCX, MD, images) and, for PDFs, the extracted `pages/<pdf-stem>/page-NNN.txt` and `.png` (one folder per PDF).
 - The output path, normally `design/brief/tz-analysis.md`.
 
 ## Output
 
-Write the output file with these sections, each item with a page reference `(p. N)`:
+Write the output file with these sections, each item with a page reference `(<file>, p. N)`:
 
 1. **Summary** — product, audience, platform, what is delivered.
 2. **Screen registry** — every screen and state, with the brief's IDs (for example S-01, P-07).
@@ -2922,7 +2923,7 @@ You review; you never edit files, publish, or decide. The dispatcher decides wha
 ## Input (from the dispatch prompt)
 
 - What to review: directions, a component batch, screens, the whole project, or a revision round file.
-- Paths: `design/brief/tz-analysis.md`, the harness URL or preview names, screenshots, `design/revisions/round-NN.md` when reviewing a round.
+- Paths: `design/brief/tz-analysis.md`, the harness URL and preview names (take your own screenshots in the browser), `design/revisions/round-NN.md` when reviewing a round.
 - Rules: `~/job/studio-design/docs/rules/design.md`, `docs/profiles/<profile>.md`, the `hallmark` rules.
 
 ## What to check
@@ -2938,7 +2939,7 @@ You review; you never edit files, publish, or decide. The dispatcher decides wha
 ## Output
 
 Findings ranked by severity (blocker, major, minor). Each: where (registry ID, file or screen),
-what is wrong, evidence (measurement, screenshot path, brief page, rule), a suggested fix.
+what is wrong, evidence (measurement, the preview or node you looked at, brief page, rule), a suggested fix.
 End with counts per severity. If nothing is wrong, say so and list what you checked.
 ```
 
@@ -2975,7 +2976,7 @@ artifact, never decide design questions — report them.
 
 - Node IDs created and changed, per page.
 - The audit result per page (paste the returned JSON).
-- Screenshot URLs or saved paths.
+- The names of the sets and screens you took a `get_screenshot` of, each with what you saw (screenshots are not files; the name and verdict are the evidence).
 - Anything you could not do, and why (for example an override the API refuses).
 ```
 

@@ -1,0 +1,27 @@
+# Stage 5 · Components (code)
+
+## Inputs
+- `design/brief/tz-analysis.md` (component registry), `design/brief/layout-budget.md`, `design/ds/project/*`, `design/ds/previews_spec.py`, `~/job/studio-design/docs/rules/design.md`, `~/job/studio-design/docs/profiles/<profile>.md`.
+- `design/directions/existing-ds.md` (entry mode «existing DS»: build only what it lists as missing).
+
+## Steps
+1. Split the registry into batches of related components; per batch:
+2. Add the components to `bundle.js` and `bundle.css`, types to `index.d.ts`, a README per component, preview specs to `previews_spec.py`; register each component in the `@ds-bundle` header and on `window.<NS>` (`docs/rules/artifact.md` › File formats).
+3. `python3 ds/scripts/gen_previews.py <Names>` and `python3 ds/scripts/build_harness.py`.
+4. Start the harness (`preview_start` ds-harness), open `harness/_sweep.html`, wait until the page title starts with `SWEEP`, then `get_page_text`.
+5. Look at every new preview in the browser; fix what looks wrong.
+6. `npm run check:types`.
+7. Publish the batch (`rules/artifact.md`).
+8. After the last batch, dispatch `studio-design-reviewer` (payload: SKILL.md › Agents) for registry coverage and states.
+
+## Outputs
+- Components in the bundle, previews, READMEs, types; a published artifact version per batch.
+
+## Gate
+- The sweep's first line is `SWEEP OK: … 0 errors, 0 overflows, 0 empty`; `check:types` passes; every new preview is listed in `progress.md` with the verdict after looking at it.
+
+## Skills and agents
+- `hallmark`; platform skills from the profile (`mobile-design-patterns` for mobile); agent `studio-design-reviewer`.
+
+## Pitfalls
+- Build continuous-value parts (sliders, progress) so Figma can express the value later (`rules/figma.md`).
