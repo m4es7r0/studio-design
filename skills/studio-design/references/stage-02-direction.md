@@ -11,7 +11,7 @@
 4. Entry mode «redesign»: audit the current product through `design-agent` (screenshots into `design/refs/`), then one direction that keeps recognisability.
 5. Entry mode «existing DS»: import the client's tokens and components through Figma MCP `get_libraries`, `search_design_system`, `get_variable_defs`; write what exists and what is missing into `design/directions/existing-ds.md`; then go to stage 3.
 6. Fonts: every proposed face comes from Google Fonts (the only host the artifact CSP and the Figma MCP runtime allow) and passes `fonts/font_check.py` before the client sees it; for Cyrillic projects start from `~/job/studio-design/docs/fonts-cyrillic.md` (its Method says how to get a face's file). Paste the `font_check.py` output into the direction file.
-7. The directions page is a `page` preview card in the group «Направления» (the group name in the client's language), written through `ds/previews_spec.py` and `gen_previews.py`, and published (`rules/artifact.md`). It shows:
+7. The directions page is a `page` preview card in the group «Направления» (the group name in the client's language), written through `ds/previews_spec.py`, `gen_previews.py` and `build_harness.py` (the reviewer opens it in the harness), and published (`rules/artifact.md`). It shows:
    - each direction has its own first screen and its own signature section, not one skeleton in three skins;
    - a states strip: field default / focus / error, primary button pressed / submitting, success, one disclosure open and closed;
    - unconfirmed facts are marked (dashed outline and «уточнить» in the client's language); nothing is invented;
