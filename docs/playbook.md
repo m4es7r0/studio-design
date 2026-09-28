@@ -11,7 +11,9 @@ The pipeline for a human reader. The agent follows `skills/studio-design/`.
 1. `scripts/new-client.sh <slug> --name "Client"` → `~/job/clients/<slug>/`.
 2. Fill `CLIENT.md` (contact, language, package, rounds, deadlines).
 3. Put the brief into `design/brief/`.
-4. Open `~/job/clients/<slug>/design` in the Claude Code desktop app and say «studio-design: stage 0».
+4. Open `~/job/clients/<slug>/design` in the Claude Code desktop app and say «studio-design: stage 0»
+   (a session opened at the container root still finds the harness through the root
+   `.claude/launch.json`, but stage paths assume `design/`).
 
 ## Stages and checkpoints
 

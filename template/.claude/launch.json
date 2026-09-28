@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "ds-harness", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "__PORT__", "--bind", "127.0.0.1", "--directory", "design/ds"], "port": __PORT__ }
+  ]
+}

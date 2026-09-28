@@ -23,6 +23,7 @@ repository is `~/job/studio-design`; its docs are the rules you follow.
 
 ## Start or resume
 
+0. Check that the working directory is `~/job/clients/<slug>/design`. If it is not, stop and ask the user to open a new session in that folder: moving the session with `change_directory` does not rebind the browser tool.
 1. Read `CLIENT.md`, `design/PROJECT.md`, `design/progress.md`, `design/decisions.md`, `design/questions.md`.
 2. The current stage is the one in `PROJECT.md`. If a gate of that stage is open, finish it first.
 3. Say in one line where the project stands and what comes next.
