@@ -47,8 +47,9 @@ fonts.google.com, fonts.googleapis.com and fonts.gstatic.com. `--figma-families 
 adds an «In Figma» column to the list (and `· in Figma: yes|no` to each `--family` line), matched on the
 family name without regard to letter case. That file is a dated capture of `figma.listAvailableFontsAsync()`
 (`{"captured", "source", "families": {family: [styles]}}`), taken with a read-only `use_figma` on the
-pipeline test Figma file, never a client file; the Figma list changes, so stage 2 still checks every proposed
-face live.
+pipeline test Figma file (key `GPcPfsQUSrt2eMQnPbGedm`), never a client file. To refresh it, read the list in
+chunks (for example by the family's first letter), because `use_figma` results over about 20 KB are truncated.
+The Figma list changes, so stage 2 still checks every proposed face live.
 
 ## Skills
 
@@ -60,7 +61,7 @@ face live.
 | `design-agent` | `~/design-intelligence-agent`, `scripts/install.sh` | 2 | references, patterns, redesign audit |
 | `mobile-design-patterns` | `~/design-intelligence-agent` | 3, 5 | mobile profile |
 | `auditing-accessibility` | `~/.claude/skills/auditing-accessibility` | 8, optional | real-device audit of a built mobile app only; not required by preflight |
-| `figma:figma-use`, `figma:figma-generate-library`, `figma:figma-generate-design` | Claude Code plugin `figma` | 7 | Plugin API rules, library build, screen build |
+| `figma:figma-use`, `figma:figma-generate-library`, `figma:figma-generate-design` | Claude Code plugin `figma` | 0, 2, 4 (`figma-use` only: access and font checks), 7 | Plugin API rules, library build, screen build |
 | `artifact-design`, `artifact-capabilities` | loaded through the artifact quickstart | 4 | page contract of the artifact |
 
 ## Agents

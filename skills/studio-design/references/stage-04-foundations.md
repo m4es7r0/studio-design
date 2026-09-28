@@ -1,7 +1,7 @@
 # Stage 4 · Foundations
 
 ## Inputs
-- The chosen direction, `design/brief/layout-budget.md`, `design/ds/project/*`, `~/job/studio-design/docs/rules/{design,numbers-and-locale,artifact}.md`, `~/job/studio-design/docs/fonts-cyrillic.md`.
+- The chosen direction, `design/brief/layout-budget.md`, `design/ds/project/*`, `~/job/studio-design/docs/rules/{design,numbers-and-locale,artifact,figma}.md`, `~/job/studio-design/docs/fonts-cyrillic.md`, `design/figma/figma-state.json` (file key for the font confirmation).
 - `design/directions/existing-ds.md` (entry mode «existing DS»: build only what it lists as missing).
 
 ## Steps
