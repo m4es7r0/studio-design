@@ -19,7 +19,7 @@ checks the local part; stage 0 of `studio-design` checks the in-session part.
 | Artifact, type Design System (quickstart, publish, read, list) | 2, 4–6, 8 | coded source of truth, previews, client link | `Artifact action=quickstart intent=other` lists a Design System type |
 | Figma MCP `use_figma`, `get_screenshot`, `get_metadata`, `upload_assets` | 7 | build and verify | `whoami` shows a Full seat and a read-only `use_figma` lists the file's pages |
 | Figma MCP `get_libraries`, `search_design_system`, `get_variable_defs` | 2, 7 | import an existing client DS | same as above |
-| Figma MCP runtime fonts | 0, 4, 7 | which fonts `use_figma` can load (the stand-in for Figma text styles) | read-only `use_figma`: `figma.listAvailableFontsAsync()` contains the family |
+| Figma MCP runtime fonts | 0, 2, 4, 7 | which fonts `use_figma` can load (the stand-in for Figma text styles) | read-only `use_figma`: `figma.listAvailableFontsAsync()` contains the family |
 | Built-in browser (`mcp__Claude_Browser__*`) or Claude in Chrome | 3, 5, 6, 8 | harness, measurements, sweep, screenshots | `preview_start` with `ds-harness` serves `ds/`; navigate to `/index.html` and see it load (`http.server` serves `.md` without a charset; the sweep page `harness/_sweep.html` appears with the first previews at stage 5) |
 | WebFetch, WebSearch | 2 | references | a fetch of a public page works |
 | AskUserQuestion | 1, 2, 9 | decisions | always present |
@@ -43,7 +43,12 @@ Studio scripts run through `scripts/py`: `scripts/pdf_pages.py` (stage 1) and `s
 which checks every Google Fonts family with a Cyrillic subset with `font_check.py` and rewrites
 `docs/fonts-cyrillic.md` (`--limit N` prints the first N instead), or with `--family "<Family>"` (repeatable)
 checks just those faces and prints `font_check.py`'s ✅/❌ lines, exit 1 on a miss (stage 2). It needs
-fonts.google.com, fonts.googleapis.com and fonts.gstatic.com.
+fonts.google.com, fonts.googleapis.com and fonts.gstatic.com. `--figma-families docs/figma-font-families.json`
+adds an «In Figma» column to the list (and `· in Figma: yes|no` to each `--family` line), matched on the
+family name without regard to letter case. That file is a dated capture of `figma.listAvailableFontsAsync()`
+(`{"captured", "source", "families": {family: [styles]}}`), taken with a read-only `use_figma` on the
+pipeline test Figma file, never a client file; the Figma list changes, so stage 2 still checks every proposed
+face live.
 
 ## Skills
 

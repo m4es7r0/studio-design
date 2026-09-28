@@ -1,5 +1,6 @@
 import contextlib
 import io
+import json
 import os
 import sys
 import tempfile
@@ -150,6 +151,54 @@ class MainTest(unittest.TestCase):
         code, out = self.run_main('--family', 'Nowhere Sans')
         self.assertEqual(code, 1)
         self.assertEqual(out.strip(), '❌ Nowhere Sans: not checked: OSError: HTTP Error 400: Bad Request')
+
+    def figma_fixture(self):
+        """A small capture: Zeta Sans in other letter case, Alpha Serif absent."""
+        path = os.path.join(self.tmp, 'figma-font-families.json')
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump({'captured': '2026-01-02', 'source': 'fixture',
+                       'families': {'ZETA sans': ['Regular', 'Semi Bold'], 'Latin Only': ['Regular']}}, f)
+        return path
+
+    def test_no_figma_families_no_in_figma_column(self):
+        self.run_main()
+        with open(self.default_out, encoding='utf-8') as f:
+            self.assertNotIn('In Figma', f.read())
+
+    def test_figma_families_add_the_in_figma_column(self):
+        fixture = self.figma_fixture()
+        code, _ = self.run_main('--figma-families', fixture)
+        self.assertEqual(code, 0)
+        with open(self.default_out, encoding='utf-8') as f:
+            md = f.read()
+        self.assertIn('cyrillic_fonts.py --figma-families %s`' % fixture, md, 'refresh command keeps the option')
+        self.assertIn('| Family | Category | In Figma |', md)
+        self.assertIn('| Zeta Sans | Sans Serif | yes |', md)
+        self.assertIn('| Family | Category | Missing | In Figma |', md)
+        self.assertIn('| Alpha Serif | Serif | U+202F narrow no-break space | no |', md)
+        self.assertIn('1 of the 1 passing families are in the Figma capture of 2026-01-02', md)
+        method = md.split('## Method', 1)[1].split('## Pass', 1)[0]
+        self.assertIn('captured 2026-01-02', method)
+        self.assertIn('stays mandatory', method)
+
+    def test_family_mode_appends_in_figma(self):
+        code, out = self.run_main('--family', 'Zeta Sans', '--family', 'Alpha Serif', '--family', 'Nowhere Sans',
+                                  '--figma-families', self.figma_fixture())
+        self.assertEqual(code, 1)
+        n = len(cyrillic_fonts.font_check.REQUIRED)
+        self.assertEqual(out.splitlines(), [
+            '✅ Zeta Sans: all %d required characters present · in Figma: yes' % n,
+            '❌ Alpha Serif: 1 missing: U+202F narrow no-break space · in Figma: no',
+            '❌ Nowhere Sans: not checked: OSError: HTTP Error 400: Bad Request · in Figma: no',
+        ])
+
+    def test_unreadable_figma_families_is_a_usage_error(self):
+        err = io.StringIO()
+        with self.assertRaises(SystemExit) as cm, contextlib.redirect_stderr(err):
+            cyrillic_fonts.main(['--figma-families', os.path.join(self.tmp, 'missing.json')])
+        self.assertEqual(cm.exception.code, 2)
+        self.assertIn('--figma-families: cannot read', err.getvalue())
+        self.assertEqual(self.net.urls, [], 'fails before any request')
 
 
 if __name__ == '__main__':
