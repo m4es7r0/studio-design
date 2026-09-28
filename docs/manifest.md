@@ -39,6 +39,10 @@ from `use_figma`, not `get_metadata` (it can omit pages).
 | git with user.name and user.email | every client container is a git repository | `git config --global …` |
 | lsof | `new-client.sh` picks a free harness port | install lsof |
 
+Studio scripts run through `scripts/py`: `scripts/pdf_pages.py` (stage 1) and `scripts/cyrillic_fonts.py`,
+which checks every Google Fonts family with a Cyrillic subset with `font_check.py` and rewrites
+`docs/fonts-cyrillic.md` (stage 2; needs fonts.google.com, fonts.googleapis.com and fonts.gstatic.com).
+
 ## Skills
 
 | Skill | Source | Stages | Role |

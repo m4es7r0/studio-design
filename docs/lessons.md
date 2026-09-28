@@ -14,3 +14,8 @@ rule or stage reference it names.
 9. Sample values typed by hand → no shared data → `ds/fixtures/` and `format_fixtures.js`.
 10. Work started inside an unrelated repository and borrowed its `node_modules` → no own project container → `new-client.sh` and the client `package.json`.
 11. No history of the design folder → it was not a git repository → every client container is one.
+12. A proposed font failed the character check only at stage 4 → `font_check.py` ran only at stage 4 and U+202F cuts most Google Cyrillic faces → run it on every proposed face at stage 2; `docs/fonts-cyrillic.md` (`stage-02-direction.md`, `rules/design.md`).
+13. The browser check failed at stage 0 → the session was opened at the container root and the browser tool binds to the session's root → a root `.claude/launch.json` in the template and a working-folder check at start (`SKILL.md`, `stage-00-intake.md`).
+14. The first directions page drew 11 major review findings → the stage reference did not say what the page must show → the directions-page checklist and the review stop rule (`stage-02-direction.md`).
+15. The client's «ок» delivered no data → decision questions and material requests shared one list → Decisions and Materials in `questions.md` (`rules/client.md`, template).
+16. The layout budget missed an overflow inside a block → zones spanned the whole column → text zones fit their content, buttons and prices `nowrap` (`stage-03-layout-budget.md`).

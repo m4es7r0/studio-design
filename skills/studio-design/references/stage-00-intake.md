@@ -25,4 +25,4 @@
 - None beyond the manifest checks.
 
 ## Pitfalls
-- `docs/lessons.md` 2 (Figma fonts) and 10 (own container).
+- `docs/lessons.md` 2 (Figma fonts), 10 (own container) and 13 (session root).

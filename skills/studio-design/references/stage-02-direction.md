@@ -34,3 +34,4 @@
 - Brand colour is a signal, not a surface (`rules/design.md`).
 - hallmark's worked examples are not style references (`rules/design.md`).
 - Screenshots need the Browser pane visible; if it is hidden, ask the user to show it (a background tab may not repaint).
+- `docs/lessons.md` 12 (fonts checked at stage 2) and 14 (what the directions page shows).

@@ -20,3 +20,4 @@
 
 ## Pitfalls
 - `docs/lessons.md` 1: this stage exists because S-08 did not fit 1080 at the end.
+- `docs/lessons.md` 16: a zone as wide as its column hides an overflow inside it.

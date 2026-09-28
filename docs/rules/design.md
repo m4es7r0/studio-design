@@ -7,6 +7,8 @@
 - Sample values come from `ds/fixtures/` through the format functions; missing data is marked `—` or «to confirm», never invented. No invented metrics in client-visible copy.
 - Contrast: WCAG AA (4.5:1 body text, 3:1 large text and UI parts).
 - One primary action per view; the brand colour signals, it does not fill surfaces.
+- Fonts we propose come from Google Fonts only (the only host the artifact CSP and the Figma MCP runtime allow). Cyrillic projects pick from `docs/fonts-cyrillic.md` or a face that passes `fonts/font_check.py`; hallmark's free display canon mostly lacks Cyrillic.
+- hallmark's worked examples are not style references (its coffee-subscription example is a category cliché with an italic display its own rules ban).
 - Checks are committed scripts (`ds/scripts/sweep.js`, `ds/scripts/measure.js`, `figma/audit.js`, `ds/scripts/check_format.js`, `fonts/font_check.py`); never write a check ad hoc in a session.
 - Client material (briefs, references, fonts, screenshots, client names) stays in the client container. The studio repository, including `docs/lessons.md`, holds none; write lessons without client names.
 - Stage references name every input file; agents never search for inputs on their own.

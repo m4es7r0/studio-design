@@ -22,3 +22,4 @@
 ## Pitfalls
 - «Как это должно ощущаться» questions are not grilled; they go to stage 2 as directions through their `decisions.md` rows (step 4).
 - Facts come from the brief through `tz-analyst`; never ask the user what the brief says.
+- `docs/lessons.md` 15: «ок» closes a decision, not a material request.
