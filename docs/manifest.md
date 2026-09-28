@@ -9,7 +9,7 @@ checks the local part; stage 0 of `studio-design` checks the in-session part.
 |---|---|---|---|
 | Claude Code desktop app, Code tab | only place with the Design System artifact type, the built-in browser and the Figma MCP together | the session lists `Artifact`, `mcp__Claude_Browser__*` and Figma MCP tools | open the project in the desktop app |
 | Model Opus | main session and every agent (`model: opus`) | session model | pick Opus in the app |
-| Figma, Professional plan, full seat | `use_figma` writes need an edit seat | Figma MCP `whoami` | upgrade the seat; the user creates the file and shares its URL |
+| Figma, Professional plan, full seat | `use_figma` writes need an edit seat | Figma MCP `whoami` shows a Full seat | upgrade the seat; the user creates the file and shares its URL |
 | Font licence | shipping fonts to a client | licence file next to the fonts (OFL or commercial) | ask the client or pick another font at stage 4 |
 
 ## Session tools
@@ -17,13 +17,18 @@ checks the local part; stage 0 of `studio-design` checks the in-session part.
 | Tool | Stages | Purpose | Check at stage 0 |
 |---|---|---|---|
 | Artifact, type Design System (quickstart, publish, read, list) | 2, 4–6, 8 | coded source of truth, previews, client link | `Artifact action=quickstart intent=other` lists a Design System type |
-| Figma MCP `use_figma`, `get_screenshot`, `get_metadata`, `upload_assets` | 7 | build and verify | `whoami` answers; a read-only `use_figma` listing pages works |
+| Figma MCP `use_figma`, `get_screenshot`, `get_metadata`, `upload_assets` | 7 | build and verify | `whoami` shows a Full seat and a read-only `use_figma` lists the file's pages |
 | Figma MCP `get_libraries`, `search_design_system`, `get_variable_defs` | 2, 7 | import an existing client DS | same as above |
 | Figma MCP runtime fonts | 0, 4, 7 | which fonts `use_figma` can load (the stand-in for Figma text styles) | read-only `use_figma`: `figma.listAvailableFontsAsync()` contains the family |
-| Built-in browser (`mcp__Claude_Browser__*`) or Claude in Chrome | 3, 5, 6, 8 | harness, measurements, sweep, screenshots | `preview_start` with `ds-harness` serves `ds/`; navigate to `/project/README.md` and see it load (the sweep page `harness/_sweep.html` appears with the first previews at stage 5) |
+| Built-in browser (`mcp__Claude_Browser__*`) or Claude in Chrome | 3, 5, 6, 8 | harness, measurements, sweep, screenshots | `preview_start` with `ds-harness` serves `ds/`; navigate to `/index.html` and see it load (`http.server` serves `.md` without a charset; the sweep page `harness/_sweep.html` appears with the first previews at stage 5) |
 | WebFetch, WebSearch | 2 | references | a fetch of a public page works |
 | AskUserQuestion | 1, 2, 9 | decisions | always present |
 | Bash | all | scripts | always present |
+
+Figma MCP server: any authenticated Figma MCP server that offers `use_figma` will do. The claude.ai
+connector works without an interactive login; the Claude Code plugin server (`plugin:figma:figma`)
+needs OAuth. Stage 0 records which server was used in the Preflight table. Take a file's page list
+from `use_figma`, not `get_metadata` (it can omit pages).
 
 ## Local dependencies (`scripts/preflight.sh`)
 
