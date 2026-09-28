@@ -1,7 +1,9 @@
+import gc
 import os
 import sys
 import tempfile
 import unittest
+import warnings
 
 from helpers import REPO, make_font
 
@@ -30,6 +32,16 @@ class FontCheckTest(unittest.TestCase):
             make_font(path, list(font_check.REQUIRED))
             self.assertEqual(font_check.missing(path, extra=[0x2192]), [(0x2192, 'extra U+2192')])
             self.assertEqual(font_check.main([path, '--extra', 'U+2192']), 1)
+
+    def test_closes_the_font_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, 'full.ttf')
+            make_font(path, list(font_check.REQUIRED))
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter('always', ResourceWarning)
+                font_check.missing(path)
+                gc.collect()
+            self.assertEqual([str(w.message) for w in caught if issubclass(w.category, ResourceWarning)], [])
 
 
 if __name__ == '__main__':

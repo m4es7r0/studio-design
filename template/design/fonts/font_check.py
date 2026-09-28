@@ -16,7 +16,8 @@ REQUIRED.update({cp: 'digit ' + chr(cp) for cp in range(0x30, 0x3A)})
 
 
 def missing(path, extra=()):
-    cmap = TTFont(path, lazy=True).getBestCmap() or {}
+    with TTFont(path, lazy=True) as font:
+        cmap = font.getBestCmap() or {}
     need = dict(REQUIRED)
     need.update({cp: 'extra U+%04X' % cp for cp in extra})
     return [(cp, name) for cp, name in sorted(need.items()) if cp not in cmap]
