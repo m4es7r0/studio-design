@@ -1,8 +1,13 @@
+import contextlib
+import io
 import os
 import sys
+import tempfile
 import unittest
+import urllib.parse
+from unittest import mock
 
-from helpers import REPO
+from helpers import REPO, make_font
 
 sys.path.insert(0, os.path.join(REPO, 'scripts'))
 import cyrillic_fonts  # noqa: E402
@@ -51,6 +56,100 @@ class CyrillicFontsTest(unittest.TestCase):
                          'https://fonts.googleapis.com/css2?family=Zeta+Sans&text=%D0%B0%E2%80%AF%E2%82%BD')
         self.assertEqual(cyrillic_fonts.css_url(fams['Alpha Serif'], '1'),
                          'https://fonts.googleapis.com/css2?family=Alpha+Serif:wght@300&text=1')
+
+
+class FakeNet:
+    """Stands in for cyrillic_fonts.fetch: the metadata above, one CSS per family, fonts built here.
+    Zeta Sans and Latin Only have every required character; Alpha Serif misses U+202F."""
+
+    def __init__(self, tmp):
+        full = list(cyrillic_fonts.font_check.REQUIRED)
+        self.fonts = {}
+        for name, cps in (('Zeta Sans', full), ('Latin Only', full), ('Alpha Serif', [cp for cp in full if cp != 0x202F])):
+            path = os.path.join(tmp, name + '.ttf')
+            make_font(path, cps)
+            with open(path, 'rb') as f:
+                self.fonts[name] = f.read()
+        self.urls = []
+
+    def __call__(self, url):
+        self.urls.append(url)
+        if url == cyrillic_fonts.METADATA_URL:
+            return META.encode('utf-8')
+        if url.startswith(cyrillic_fonts.CSS_URL):
+            family = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)['family'][0].split(':')[0]
+            if family not in self.fonts:
+                raise OSError('HTTP Error 400: Bad Request')
+            return ("@font-face { src: url(https://fonts.test/%s.ttf) format('truetype'); }" % urllib.parse.quote(family)).encode()
+        return self.fonts[urllib.parse.unquote(url.rsplit('/', 1)[1][:-4])]
+
+
+class MainTest(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.tmp = tmp.name
+        self.net = FakeNet(self.tmp)
+        self.default_out = os.path.join(self.tmp, 'fonts-cyrillic.md')
+        for target, value in (('fetch', self.net), ('DEFAULT_OUT', self.default_out)):
+            patcher = mock.patch.object(cyrillic_fonts, target, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
+    def run_main(self, *argv):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+            code = cyrillic_fonts.main(list(argv))
+        return code, out.getvalue()
+
+    def test_no_options_write_the_default_file(self):
+        code, out = self.run_main()
+        self.assertEqual(code, 0)
+        with open(self.default_out, encoding='utf-8') as f:
+            md = f.read()
+        self.assertIn('## Pass (1)', md)
+        self.assertIn('| Zeta Sans | Sans Serif |', md)
+        self.assertIn('| Alpha Serif | Serif | U+202F narrow no-break space |', md)
+        self.assertNotIn('Latin Only', md)
+        self.assertNotIn('# Cyrillic Google Fonts', out)
+
+    def test_limit_without_out_prints_to_stdout(self):
+        code, out = self.run_main('--limit', '1')
+        self.assertEqual(code, 0)
+        self.assertIn('# Cyrillic Google Fonts', out)
+        self.assertIn('| Alpha Serif |', out)
+        self.assertNotIn('Zeta Sans', out)
+        self.assertFalse(os.path.exists(self.default_out))
+
+    def test_limit_with_out_writes_that_file(self):
+        path = os.path.join(self.tmp, 'some.md')
+        code, out = self.run_main('--limit', '2', '--out', path)
+        self.assertEqual(code, 0)
+        with open(path, encoding='utf-8') as f:
+            self.assertIn('| Zeta Sans | Sans Serif |', f.read())
+        self.assertNotIn('# Cyrillic Google Fonts', out)
+        self.assertFalse(os.path.exists(self.default_out))
+
+    def test_family_prints_check_lines_and_fails_on_a_miss(self):
+        code, out = self.run_main('--family', 'Zeta Sans', '--family', 'Alpha Serif')
+        self.assertEqual(code, 1)
+        n = len(cyrillic_fonts.font_check.REQUIRED)
+        self.assertEqual(out.splitlines(), [
+            '✅ Zeta Sans: all %d required characters present' % n,
+            '❌ Alpha Serif: 1 missing: U+202F narrow no-break space',
+        ])
+        self.assertTrue(any('family=Alpha+Serif:wght@300&' in u for u in self.net.urls), 'style from the catalogue')
+        self.assertFalse(os.path.exists(self.default_out))
+
+    def test_family_needs_no_cyrillic_subset(self):
+        code, out = self.run_main('--family', 'Latin Only')
+        self.assertEqual(code, 0)
+        self.assertTrue(out.startswith('✅ Latin Only: all '))
+
+    def test_family_that_errors_is_not_checked_and_fails(self):
+        code, out = self.run_main('--family', 'Nowhere Sans')
+        self.assertEqual(code, 1)
+        self.assertEqual(out.strip(), '❌ Nowhere Sans: not checked: OSError: HTTP Error 400: Bad Request')
 
 
 if __name__ == '__main__':

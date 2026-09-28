@@ -1,7 +1,10 @@
 """Checks which Google Fonts families with a Cyrillic subset pass fonts/font_check.py; writes docs/fonts-cyrillic.md.
 Usage: scripts/py scripts/cyrillic_fonts.py [--limit N] [--out PATH]
+       scripts/py scripts/cyrillic_fonts.py --family NAME [--family NAME ...]
 Needs the network (fonts.google.com, fonts.googleapis.com, fonts.gstatic.com). --limit checks the N most
-popular Cyrillic families only. A family whose request fails is listed as «not checked» with the reason."""
+popular Cyrillic families only and prints the list unless --out is given. A family whose request fails
+is listed as «not checked» with the reason. --family checks just the named families, prints font_check's
+✅/❌ lines and exits 1 when any fails or cannot be checked."""
 import argparse
 import concurrent.futures
 import datetime
@@ -25,6 +28,7 @@ USER_AGENT = ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.3
               'Chrome/126.0.0.0 Safari/537.36')
 TIMEOUT = 30
 WORKERS = 8
+DEFAULT_OUT = os.path.join(REPO, 'docs', 'fonts-cyrillic.md')
 
 
 def parse_metadata(text):
@@ -128,14 +132,13 @@ def render(results, today, cyrillic_count, family_count):
         '   `template/design/fonts/font_check.py`, the same check as stage 4 (U+202F is required: `format`',
         '   prints it as the thousands separator).',
         '',
-        'To check one face by hand at stage 2: fetch the step 2 URL for it with a browser User-Agent,',
-        'download the `url(...)` it names, and run',
-        '`~/job/studio-design/scripts/py fonts/font_check.py <file>` in `design/`. At stage 4 check the',
-        'woff2 files of every weight you ship.',
+        'To check one face at stage 2 the same way:',
+        '`~/job/studio-design/scripts/py ~/job/studio-design/scripts/cyrillic_fonts.py --family "<Family>"`.',
+        'At stage 4 check the woff2 files of every weight you ship.',
         '',
         'Google\'s regular CSS (without `text=`) serves per-range woff2 files that drop U+202F even from',
-        'faces that have it (a preview that links it draws U+202F in a fallback face). Take the stage 4',
-        'files from the full family (the Google Fonts download or the google/fonts repository).',
+        'faces that have it (a preview that links it draws U+202F in a fallback face). Stage 4 takes the',
+        'files from the full family in the google/fonts repository (`stage-04-foundations.md` step 3).',
         '',
         '## Pass (%d)' % len(passed),
         '',
@@ -150,25 +153,50 @@ def render(results, today, cyrillic_count, family_count):
     return '\n'.join(lines) + '\n'
 
 
+def check_named(meta, names, text):
+    """Checks the named families (catalogue entry by name when there is one) and prints font_check lines."""
+    by_name = {f['family'].lower(): f for f in meta.get('familyMetadataList', [])}
+    status = 0
+    for name in names:
+        r = check_family(by_name.get(name.lower(), {'family': name}), text)
+        if r['status'] == 'pass':
+            print('✅ %s: all %d required characters present' % (r['family'], len(font_check.REQUIRED)))
+            continue
+        status = 1
+        if r['status'] == 'fail':
+            print('❌ %s: %d missing: %s' % (r['family'], len(r['missing']), ', '.join('U+%04X %s' % m for m in r['missing'])))
+        else:
+            print('❌ %s: not checked: %s' % (r['family'], r['reason']))
+    return status
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument('--limit', type=int, default=0, help='check only the N most popular Cyrillic families')
-    ap.add_argument('--out', default=os.path.join(REPO, 'docs', 'fonts-cyrillic.md'))
+    ap.add_argument('--limit', type=int, default=0, help='check only the N most popular Cyrillic families; prints unless --out is given')
+    ap.add_argument('--out', help='where to write the list (default: docs/fonts-cyrillic.md; stdout with --limit)')
+    ap.add_argument('--family', action='append', default=[], metavar='NAME',
+                    help='check just this family (repeatable); prints ✅/❌ lines, exit 1 if any fails')
     a = ap.parse_args(argv)
     meta = parse_metadata(fetch(METADATA_URL).decode('utf-8'))
+    text = required_text()
+    if a.family:
+        return check_named(meta, a.family, text)
     fams = cyrillic_families(meta)
     todo = fams[:a.limit] if a.limit > 0 else fams
-    text = required_text()
     with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as ex:
         results = list(ex.map(lambda f: check_family(f, text), todo))
     md = render(results, datetime.date.today().isoformat(), len(fams), len(meta.get('familyMetadataList', [])))
-    with open(a.out, 'w', encoding='utf-8') as f:
-        f.write(md)
+    out = a.out or (None if a.limit > 0 else DEFAULT_OUT)
+    if out is None:
+        sys.stdout.write(md)
+    else:
+        with open(out, 'w', encoding='utf-8') as f:
+            f.write(md)
     counts = {s: sum(r['status'] == s for r in results) for s in ('pass', 'fail', 'not checked')}
     print('checked %d of %d Cyrillic families: %d pass, %d fail, %d not checked -> %s'
-          % (len(results), len(fams), counts['pass'], counts['fail'], counts['not checked'], a.out))
+          % (len(results), len(fams), counts['pass'], counts['fail'], counts['not checked'], out or 'stdout'),
+          file=sys.stderr)
     return 0
-
 
 if __name__ == '__main__':
     sys.exit(main())

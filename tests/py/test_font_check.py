@@ -3,28 +3,10 @@ import sys
 import tempfile
 import unittest
 
-from fontTools.fontBuilder import FontBuilder
-from fontTools.pens.ttGlyphPen import TTGlyphPen
-
-from helpers import REPO
+from helpers import REPO, make_font
 
 sys.path.insert(0, os.path.join(REPO, 'template', 'design', 'fonts'))
 import font_check  # noqa: E402
-
-
-def make_font(path, codepoints):
-    names = ['.notdef'] + ['g%04X' % cp for cp in codepoints]
-    fb = FontBuilder(1000, isTTF=True)
-    fb.setupGlyphOrder(names)
-    fb.setupCharacterMap({cp: 'g%04X' % cp for cp in codepoints})
-    empty = TTGlyphPen(None).glyph()
-    fb.setupGlyf({n: empty for n in names})
-    fb.setupHorizontalMetrics({n: (500, 0) for n in names})
-    fb.setupHorizontalHeader(ascent=800, descent=-200)
-    fb.setupNameTable({'familyName': 'Test', 'styleName': 'Regular'})
-    fb.setupOS2()
-    fb.setupPost()
-    fb.save(path)
 
 
 class FontCheckTest(unittest.TestCase):

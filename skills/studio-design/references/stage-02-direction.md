@@ -2,7 +2,7 @@
 
 ## Inputs
 - `design/brief/tz-analysis.md`, `design/decisions.md` (audience, the «Moved to stage 2» rows), `design/PROJECT.md` (entry mode, profile), `design/refs/`.
-- `~/job/studio-design/docs/rules/{design,artifact}.md`, `~/job/studio-design/docs/fonts-cyrillic.md` (Cyrillic projects), `design/fonts/font_check.py`.
+- `~/job/studio-design/docs/rules/{design,artifact}.md`, `~/job/studio-design/docs/fonts-cyrillic.md` (Cyrillic projects), `~/job/studio-design/scripts/cyrillic_fonts.py`.
 
 ## Steps
 1. Every entry mode except «existing DS»: create the artifact from the Design System type (`Artifact action=quickstart intent=other`), read its `project/design-system.json` and merge it into `ds/project/design-system.json` (keep `createdOnFiles`); record the URL in `PROJECT.md` and `CLIENT.md`.
@@ -10,7 +10,7 @@
 3. Entry mode «brand book»: colours, fonts and logo are fixed; write one direction that sets colour roles, contrast and tone.
 4. Entry mode «redesign»: audit the current product through `design-agent` (screenshots into `design/refs/`), then one direction that keeps recognisability.
 5. Entry mode «existing DS»: import the client's tokens and components through Figma MCP `get_libraries`, `search_design_system`, `get_variable_defs`; write what exists and what is missing into `design/directions/existing-ds.md`; then go to stage 3.
-6. Fonts: every proposed face comes from Google Fonts (the only host the artifact CSP and the Figma MCP runtime allow) and passes `fonts/font_check.py` before the client sees it; for Cyrillic projects start from `~/job/studio-design/docs/fonts-cyrillic.md` (its Method says how to get a face's file). Paste the `font_check.py` output into the direction file.
+6. Fonts: every proposed face comes from Google Fonts (the only host the artifact CSP and the Figma MCP runtime allow) and passes `font_check.py` before the client sees it; for Cyrillic projects start from `~/job/studio-design/docs/fonts-cyrillic.md`. For each proposed face run `~/job/studio-design/scripts/py ~/job/studio-design/scripts/cyrillic_fonts.py --family "<Family>"` (it prints `font_check.py`'s ✅/❌ line and exits 1 on a miss) and paste its output into the direction file.
 7. The directions page is a `page` preview card in the group «Направления» (the group name in the client's language), written through `ds/previews_spec.py`, `gen_previews.py` and `build_harness.py` (the reviewer opens it in the harness), and published (`rules/artifact.md`). It shows:
    - each direction has its own first screen and its own signature section, not one skeleton in three skins;
    - a states strip: field default / focus / error, primary button pressed / submitting, success, one disclosure open and closed;

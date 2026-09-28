@@ -14,14 +14,13 @@ Refresh: `~/job/studio-design/scripts/py ~/job/studio-design/scripts/cyrillic_fo
    `template/design/fonts/font_check.py`, the same check as stage 4 (U+202F is required: `format`
    prints it as the thousands separator).
 
-To check one face by hand at stage 2: fetch the step 2 URL for it with a browser User-Agent,
-download the `url(...)` it names, and run
-`~/job/studio-design/scripts/py fonts/font_check.py <file>` in `design/`. At stage 4 check the
-woff2 files of every weight you ship.
+To check one face at stage 2 the same way:
+`~/job/studio-design/scripts/py ~/job/studio-design/scripts/cyrillic_fonts.py --family "<Family>"`.
+At stage 4 check the woff2 files of every weight you ship.
 
 Google's regular CSS (without `text=`) serves per-range woff2 files that drop U+202F even from
-faces that have it (a preview that links it draws U+202F in a fallback face). Take the stage 4
-files from the full family (the Google Fonts download or the google/fonts repository).
+faces that have it (a preview that links it draws U+202F in a fallback face). Stage 4 takes the
+files from the full family in the google/fonts repository (`stage-04-foundations.md` step 3).
 
 ## Pass (46)
 

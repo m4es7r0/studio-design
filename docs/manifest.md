@@ -41,7 +41,9 @@ from `use_figma`, not `get_metadata` (it can omit pages).
 
 Studio scripts run through `scripts/py`: `scripts/pdf_pages.py` (stage 1) and `scripts/cyrillic_fonts.py`,
 which checks every Google Fonts family with a Cyrillic subset with `font_check.py` and rewrites
-`docs/fonts-cyrillic.md` (stage 2; needs fonts.google.com, fonts.googleapis.com and fonts.gstatic.com).
+`docs/fonts-cyrillic.md` (`--limit N` prints the first N instead), or with `--family "<Family>"` (repeatable)
+checks just those faces and prints `font_check.py`'s ✅/❌ lines, exit 1 on a miss (stage 2). It needs
+fonts.google.com, fonts.googleapis.com and fonts.gstatic.com.
 
 ## Skills
 
