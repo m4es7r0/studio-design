@@ -1,7 +1,7 @@
 {
   "examples": [
-    { "id": "price", "name": "Цена", "type": "money", "value": 1490 },
-    { "id": "weight", "name": "Вес", "type": "count", "unit": "г", "value": 250 },
+    { "id": "price", "name": "Цена", "type": "money", "value": 1290 },
+    { "id": "weight", "name": "Вес", "type": "count", "unit": "г", "value": 200 },
     { "id": "orders", "name": "Заказы", "type": "count", "unit": "шт.", "value": 12500, "delta": 800 }
   ]
 }

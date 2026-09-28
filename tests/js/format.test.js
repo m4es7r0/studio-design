@@ -18,8 +18,8 @@ test('fixtures render through the format functions', () => {
   execFileSync('node', [path.join(c, 'design/ds/scripts/format_fixtures.js')]);
   const out = JSON.parse(fs.readFileSync(path.join(c, 'design/ds/fixtures/formatted.json'), 'utf8'));
   // U+202F groups thousands, U+00A0 joins the unit.
-  assert.deepEqual(out.examples.price, { name: 'Цена', value: '1\u202F490\u00A0₽', delta: null });
-  assert.equal(out.examples.weight.value, '250\u00A0г');
+  assert.deepEqual(out.examples.price, { name: 'Цена', value: '1\u202F290\u00A0₽', delta: null });
+  assert.equal(out.examples.weight.value, '200\u00A0г');
   assert.equal(out.examples.orders.value, '12\u202F500\u00A0шт.');
   assert.equal(out.examples.orders.delta, '+800\u00A0шт.');
 });
