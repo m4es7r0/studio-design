@@ -214,3 +214,31 @@ on one.
 - escape every `<` in embedded JSON.
 - string-level tests for fontsReady/rethrow; render()/check_family() untested.
 - stage 4 step 3 lacks `mkdir -p ds/project/fonts fonts/src`, a download URL pattern, multi-axis/italic files, and a build_harness rerun; manifest lacks the GitHub host; weight naming differs from the artifact.md example; cyrillic_fonts.py PEP 8 blank line and --limit/--out ignored with --family.
+
+## 4. Gaps found preparing the first real run (2026-09-30)
+
+A redesign of a coded product with an English UI, both themes and no Figma. The run's prompt works around each
+of these; fix them in the pipeline before the next such client.
+- Both themes: `build_harness.py` emits only `color.themes[0]` and a token has one value; aliased tokens resolve
+  on `:root`, so a `dark` class on `#root` does not recolour them. Workaround: literal `oklch()` tokens, a `.dark`
+  block in `bundle.css`, and a `<Name>Dark` twin of every preview. Fix: a real second theme in tokens, harness,
+  sweep, measure and the artifact.
+- No committed contrast script, although stages 2, 4 and 8 need figures (rules forbid ad hoc checks). Workaround:
+  a client copy of a small oklch → WCAG script. Fix: `ds/scripts/contrast.py` in the template, reading tokens and
+  the dark block.
+- Locale: `format`, fixtures and `gen_previews.py` default to ru-RU, and the directions page (stage 2) already
+  uses them, so a non-ru locale decided at stage 4 comes too late. Fix: decide the locale at stage 0 and ship an
+  en-US `format` variant.
+- Packages: «ДС» allows 1–2 layout-budget templates, but a redesign owner may want specific key screens; and
+  there is still no «ДС + код» stage. Workaround: a recorded deviation plus `handoff/code-mapping.md`
+  (token → CSS variable, component → kit component, screen → route). Fix: a package with named key screens and a
+  code-mapping handoff.
+- `studio-design-reviewer` does not read `decisions.md`, so accepted deviations (locale, density, scope) come back
+  as findings. Fix: add `decisions.md` and the package scope to its payload in SKILL.md.
+- Entry mode «redesign» allows one direction; an owner may want 2–3 on a fixed base. Fix: let the owner choose.
+- Figma is woven into stage 0 outputs, stage 2 and 4 font checks, stage 7 and stage 8 (`audit.js`); a no-Figma
+  project needs a single «no Figma» switch instead of accepting ❌ one by one.
+- Redesign before/after screenshots: the run built a reusable Playwright capture script (pages, widths, states,
+  read-only, skips «new» items). Fix: a template `refs/capture.mjs` with a per-project route list.
+- Web-product profile: fields 40–44 px conflicts with compact kit presets (shadcn Mira 28 px); record density as
+  a stage 2 decision instead of a fixed profile value.
