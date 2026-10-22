@@ -6,7 +6,7 @@ Design doctrine — construction (spacing, edges, siblings, radii), tokens, stat
 - Tokens, states, the error and focus rings, honest gaps and contrast follow attmpt-design (Steps 0, 8, 11).
 - Layout budget before components: the densest screens are measured at the target size at stage 3.
 - Sample values come from `ds/fixtures/` through the format functions (the doctrine on missing values is attmpt-design Step 11).
-- Contrast figures for every pair in every theme are recorded at stages 2, 4 and 8.
+- Contrast figures for every pair in every theme are recorded at stages 2, 4 and 8; until the template ships a contrast script (backlog §4), each pair is measured in the browser (computed colours → WCAG ratio, for example DevTools' accessibility pane) and recorded as pair, theme and ratio; that is a measurement, not an ad hoc check script.
 - Fonts we propose come from Google Fonts only (the only host the artifact CSP and the Figma MCP runtime allow) and carry every character the project's locale needs. Cyrillic projects pick from `docs/fonts-cyrillic.md` or a face that passes `fonts/font_check.py`.
 - Checks are committed scripts (`ds/scripts/sweep.js`, `ds/scripts/measure.js`, `figma/audit.js`, `ds/scripts/check_format.js`, `fonts/font_check.py`); never write a check ad hoc in a session.
 - Client material (briefs, references, fonts, screenshots, client names) stays in the client container. The studio repository, including `docs/lessons.md`, holds none; write lessons without client names.

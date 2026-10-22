@@ -1,7 +1,7 @@
 # Stage 4 · Foundations
 
 ## Inputs
-- The frozen sketch and the chosen direction, `design/brief/layout-budget.md`, `design/ds/project/*`, `design/PROJECT.md` (switches, themes, locale), `~/job/studio-design/docs/rules/{design,numbers-and-locale,artifact,figma}.md`, `~/job/studio-design/docs/fonts-cyrillic.md`, `design/figma/figma-state.json` (only with `Figma: yes`, for the font confirmation).
+- The frozen sketch (`design/directions/frozen/`) and the chosen direction, `design/brief/layout-budget.md`, `design/ds/project/*`, `design/PROJECT.md` (switches, themes, locale), `~/job/studio-design/docs/rules/{design,numbers-and-locale,artifact,figma}.md`, `~/job/studio-design/docs/fonts-cyrillic.md`, `design/figma/figma-state.json` (only with `Figma: yes`, for the font confirmation).
 - `design/directions/existing-ds.md` (entry mode «existing DS»: build only what it lists as missing).
 
 ## Steps
@@ -12,6 +12,7 @@
 5. Extend `ds/fixtures/sample.json` to every value type the components will show; run `npm run fixtures`.
 6. Contrast figures of every text and UI pair in every theme go into `progress.md`.
 7. Publish the style tile only with `Artifact: yes` (`rules/artifact.md`); with `Artifact: checkpoints` it is published at stage 8.
+8. If this stage's «to confirm» rows are not empty, run `grilling` with the user over them and hold a 🧑 mini-checkpoint before the gate (lesson 31).
 
 ## Outputs
 - `tokens.json`, `bundle.css`, `README.md`, fonts, `fixtures/formatted.json`; the style tile (published only with `Artifact: yes`); the Figma stand-in row in `decisions.md` when one is needed.

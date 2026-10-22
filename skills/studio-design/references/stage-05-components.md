@@ -1,7 +1,7 @@
 # Stage 5 · Components (code)
 
 ## Inputs
-- `design/brief/tz-analysis.md` (component registry), `design/brief/layout-budget.md` (with its layout parts), the frozen sketch, `design/ds/project/*`, `design/ds/previews_spec.py`, `design/PROJECT.md` (switches), `~/job/studio-design/docs/rules/design.md`, `~/job/studio-design/docs/profiles/<profile>.md`.
+- `design/brief/tz-analysis.md` (component registry), `design/brief/layout-budget.md` (with its layout parts), the frozen sketch (`design/directions/frozen/`), `design/ds/project/*`, `design/ds/previews_spec.py`, `design/PROJECT.md` (switches), `~/job/studio-design/docs/rules/design.md`, `~/job/studio-design/docs/profiles/<profile>.md`.
 - `design/directions/existing-ds.md` (entry mode «existing DS»: build only what it lists as missing).
 
 ## Steps
@@ -13,6 +13,7 @@
 6. `npm run check:types`.
 7. Publish the batch only with `Artifact: yes` (`rules/artifact.md`).
 8. After the last batch, dispatch `studio-design-reviewer` (payload: SKILL.md › Skills and agents) for registry coverage and states, within `Review passes:`.
+9. If this stage's «to confirm» rows are not empty, run `grilling` with the user over them and hold a 🧑 mini-checkpoint before the gate (lesson 31).
 
 ## Outputs
 - Components in the bundle, previews, READMEs, types; with `Artifact: yes`, a published artifact version per batch.

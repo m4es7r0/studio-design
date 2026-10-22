@@ -29,4 +29,18 @@ reviewer="$REPO/agents/studio-design-reviewer.md"
 for p in $(grep -oE '~/[A-Za-z0-9_./-]*hallmark[A-Za-z0-9_./-]*\.md' "$reviewer" | sort -u); do
   assert_file "${p/#\~/$HOME}"
 done
+# Final-review fixes (2026-10-22).
+rev="$(cat "$reviewer")"
+case "$(grep '^tools:' "$reviewer")" in *Write*) pass "the reviewer can write its report file" ;; *) fail "the reviewer has no Write tool for its report file" ;; esac
+assert_contains "$rev" "your report file is your one write" "the reviewer's only write is its report"
+assert_file "$REPO/template/design/reports/.gitkeep"
+assert_contains "$(cat "$REPO/docs/rules/design.md")" "until the template ships a contrast script" "rules name the interim contrast method"
+assert_contains "$(cat "$refs/stage-02-direction.md")" "design/directions/frozen/" "stage 2 names the frozen sketch path"
+assert_contains "$(sed -n '/^## Gate/,/^## /p' "$refs/stage-02-direction.md")" "design/directions/frozen/" "the stage 2 gate checks the frozen sketch"
+for n in 04-foundations 05-components; do
+  assert_contains "$(sed -n '/^## Inputs/,/^## /p' "$refs/stage-$n.md")" "design/directions/frozen/" "stage $n reads the frozen sketch by path"
+done
+for n in 03-layout-budget 04-foundations 05-components 06-screens 07-figma; do
+  assert_contains "$(cat "$refs/stage-$n.md")" "«to confirm» rows are not empty" "stage $n asks its «to confirm» rows before the gate"
+done
 finish

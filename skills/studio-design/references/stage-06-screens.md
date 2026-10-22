@@ -8,6 +8,7 @@
 2. Invoke `attmpt-design` for each screen: a preview page with the `page` card marker and its width; every value from the fixtures; rails, zones and free areas marked with `data-zone="<zone name>"`. A screen defines no reusable part of its own: a missing part goes back to stage 5 (lesson 28).
 3. Measure every screen at every target size with `harness/_measure.html?page=<Name>&w=<W>&h=<H>` (wait until the page title starts with `MEASURE`, then `get_page_text`); paste the first line and the JSON of every run into `progress.md`. On profiles whose pages scroll (web-landing, web-product, mobile), measure the full page with `h=auto` (width only), and use a fixed `h` only for zones that must stay inside the viewport (shell, rails, sticky bars, the first screen); mark only those zones with `data-zone` on the fixed-height run, or run the fixed-height check on a preview of that part alone.
 4. Sweep and look; publish only with `Artifact: yes`; dispatch `studio-design-reviewer` (payload: SKILL.md › Skills and agents) on the screens, within `Review passes:`.
+5. If this stage's «to confirm» rows are not empty, run `grilling` with the user over them and hold a 🧑 mini-checkpoint before the gate (lesson 31).
 
 ## Outputs
 - Screen preview pages; measurements in `progress.md`; with `Artifact: yes`, a published artifact version.

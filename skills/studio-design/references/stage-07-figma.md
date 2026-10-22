@@ -12,6 +12,7 @@ Runs only with `Figma: yes`. With `Figma: no` the stage is skipped: record one l
 3. Take your own `get_screenshot` of each node ID the builder returns and record the verdict: write the names of the sets and screens looked at, with verdicts, in `progress.md`; send defects back to the builder as a new batch (payload: SKILL.md › Skills and agents). A spot-check of the screenshots is enough when the builder's audit is clean (lesson 44).
 4. Templates and screens from stage 6, with fixture values and the background assets (`upload_assets`).
 5. Keep `figma-state.json` current (the figma-generate-library ledger lives in the container, not in `/tmp`); one Doc frame per page.
+6. If this stage's «to confirm» rows are not empty, run `grilling` with the user over them and hold a 🧑 mini-checkpoint before the gate (lesson 31).
 
 ## Outputs
 - The Figma library and screens; `figma-state.json`; audit outputs and the names of the sets and screens looked at, with verdicts, in `progress.md`.
