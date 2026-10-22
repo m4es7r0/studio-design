@@ -8,7 +8,7 @@ checks the local part; stage 0 of `studio-design` checks the in-session part.
 | Item | Why | Check | Fix |
 |---|---|---|---|
 | Claude Code desktop app, Code tab | only place with the Design System artifact type, the built-in browser and the Figma MCP together | the session lists `Artifact`, `mcp__Claude_Browser__*` and Figma MCP tools | open the project in the desktop app |
-| Model Opus | main session and every agent (`model: opus`) | session model | pick Opus in the app |
+| Models | main session opus; `studio-design-reviewer` opus; `tz-analyst` and `studio-design-figma-builder` sonnet | session model and agent frontmatter | pick Opus in the app |
 | Figma, Professional plan, full seat | `use_figma` writes need an edit seat | Figma MCP `whoami` shows a Full seat | upgrade the seat; the user creates the file and shares its URL |
 | Font licence | shipping fonts to a client | licence file next to the fonts (OFL or commercial) | ask the client or pick another font at stage 4 |
 
@@ -57,21 +57,22 @@ The Figma list changes, so stage 2 still checks every proposed face live.
 |---|---|---|---|
 | `studio-design` | this repository, `scripts/install.sh` | all | orchestrator |
 | `grilling` | `~/job/agent-skills`, `install.sh` | 1, 9 | decision-tree interview with output file, client questions and fact-finder options |
-| `hallmark` | `~/.agents/skills/hallmark` (linked into `~/.claude/skills`) | 2, 4, 8 | directions, anti-slop rules, audit |
-| `design-agent` | `~/design-intelligence-agent`, `scripts/install.sh` | 2 | references, patterns, redesign audit |
-| `mobile-design-patterns` | `~/design-intelligence-agent` | 3, 5 | mobile profile |
+| `design-agent` | `~/design-intelligence-agent`, `scripts/install.sh` | 2 | research, directions brief, redesign audit (dispatches its own design-scout) |
+| `attmpt-design` | `~/design-intelligence-agent`, `scripts/install.sh` | 2 (Sketch mode), 4, 5, 6, 9 | building: sketches, foundations, components, screens |
+| `mobile-design-patterns` | `~/design-intelligence-agent` | 3, 5, 8 | mobile build-spec and audit |
 | `auditing-accessibility` | `~/.claude/skills/auditing-accessibility` | 8, optional | real-device audit of a built mobile app only; not required by preflight |
-| `figma:figma-use`, `figma:figma-generate-library`, `figma:figma-generate-design` | Claude Code plugin `figma` | 0, 2, 4 (`figma-use` only: access and font checks), 7 | Plugin API rules, library build, screen build |
-| `artifact-design`, `artifact-capabilities` | loaded through the artifact quickstart | 4 | page contract of the artifact |
+| `figma:figma-use`, `figma:figma-generate-library`, `figma:figma-generate-design` | Claude Code plugin `figma` | only with `Figma: yes`: 0, 2, 4 (`figma-use`: access and font checks), 7 | Plugin API rules, library build, screen build |
+| `artifact-design`, `artifact-capabilities` | loaded through the artifact quickstart | 2, 4 when `Artifact:` is not `no` | page contract of the artifact |
+
+hallmark (`~/.agents/skills/hallmark`, not a linked skill) is read only by `studio-design-reviewer` as the slop audit of marketing surfaces, with `design-agent/references/hallmark-waivers.md`. The map of every design skill: `~/job/agent-skills/docs/design-skills-role-map.md`.
 
 ## Agents
 
 | Agent | Source | Stages |
 |---|---|---|
-| `tz-analyst` | this repository | 1 (and fact-finder for `grilling`) |
-| `design-scout` | `~/design-intelligence-agent` | 2 (dispatched with `model: opus`; its own frontmatter says sonnet) |
-| `studio-design-reviewer` | this repository | 2, 5, 6, 8, 9 |
-| `studio-design-figma-builder` | this repository | 7 |
+| `tz-analyst` | this repository, sonnet | 1 (and fact-finder for `grilling`) |
+| `studio-design-reviewer` | this repository, opus | 2, 5, 6, 8, 9 |
+| `studio-design-figma-builder` | this repository, sonnet | 7 (only with `Figma: yes`) |
 
 ## Not built
 

@@ -7,22 +7,24 @@
 ## Steps
 1. Run `~/job/studio-design/scripts/preflight.sh`; paste its output into `design/progress.md` › Preflight.
 2. Run `npm install --no-audit --no-fund` in `design/` (needed by `npm run check:types`); record ✅/❌ as a row of the Preflight table. Commit `design/package-lock.json` with the stage, so `tsc` stays reproducible.
-3. With the user, fill the empty fields of `CLIENT.md` (contact, language, package, rounds, deadlines) and `PROJECT.md` (entry mode, platform profile, target sizes).
-4. Ask the user for the Figma file URL for this client; record it in `PROJECT.md`, in `../CLIENT.md` › Links and access, and in `design/figma/figma-state.json` (`fileKey`, `fileUrl`).
-5. In-session checks, each as ✅/❌ with a fix in the same table:
-   - Figma MCP: `whoami` shows a Full seat and a read-only `use_figma` lists the file's pages (file from step 4). Any authenticated Figma MCP server that offers `use_figma` will do (the claude.ai connector works without an interactive login; the Claude Code plugin server needs OAuth); record which server was used in the Preflight table. Take the page list from `use_figma`, not `get_metadata` (it can omit pages).
-   - Artifact: `Artifact action=quickstart intent=other` lists a Design System type.
+3. With the user, fill the empty fields of `CLIENT.md` (contact, language, package, rounds, deadlines) and `PROJECT.md`: entry mode, platform profile, target sizes and the switches. Defaults: `Figma: no` unless the package or the client asks for Figma; `Artifact: checkpoints` (publish only at the 🧑 stages 2 and 8, work on the local harness); `Themes:` and `Locale:` as the product needs; `Directions:` 3 from scratch, 1 brand book, 2 redesign, 0 existing DS; `Review passes: 2`. Record the pass budget in `decisions.md`.
+4. Locale (lesson 21): when it is not ru-RU, rewrite `format` and `ds/fixtures/format-cases.json` for it and generate previews with `--lang <code>` before stage 2 — stage 2 already prints numbers and dates; record the font characters the locale needs.
+5. Only with `Figma: yes`: ask the user for the Figma file URL; record it in `PROJECT.md`, in `../CLIENT.md` › Links and access, and in `design/figma/figma-state.json` (`fileKey`, `fileUrl`).
+6. In-session checks, each as ✅/❌ with a fix in the same table:
+   - Only with `Figma: yes` — Figma MCP: `whoami` shows a Full seat and a read-only `use_figma` lists the file's pages (file from step 5). Any authenticated Figma MCP server that offers `use_figma` will do; record which server was used. Take the page list from `use_figma`, not `get_metadata` (it can omit pages).
+   - Only when `Artifact:` is not `no` — Artifact: `Artifact action=quickstart intent=other` lists a Design System type.
    - Browser: `preview_start` with the `ds-harness` configuration serves `ds/`; navigate to `http://localhost:<port>/index.html` and see it load. (`http.server` serves `.md` without a charset, so Cyrillic in `/project/README.md` breaks; the sweep page appears with the first previews at stage 5.)
-   - Figma fonts: only for font families known at intake (entry mode «brand book» or «existing DS»): in a read-only `use_figma` (load `figma:figma-use` first), `figma.listAvailableFontsAsync()` contains the family; if not, record a Google stand-in to use. Otherwise (entry mode «from scratch» or «redesign») record «deferred to stage 2» in the Preflight table: stage 2 checks every proposed face.
+   - Only with `Figma: yes` — Figma fonts: for font families known at intake (entry mode «brand book» or «existing DS»), a read-only `use_figma` (load `figma:figma-use` first) shows `figma.listAvailableFontsAsync()` contains the family; if not, record a Google stand-in. Otherwise record «deferred to stage 2».
+   - With `Figma: no` or `Artifact: no`, record the skipped checks in one Preflight row.
 
 ## Outputs
-- `design/progress.md` › Preflight table; filled `CLIENT.md` and `PROJECT.md` with the Figma file URL; `figma-state.json` with the file key and URL.
+- `design/progress.md` › Preflight table; filled `CLIENT.md` and `PROJECT.md` with the switches; with `Figma: yes` the Figma file URL and `figma-state.json`.
 
 ## Gate
-- No ❌ in the preflight table, or each ❌ accepted by the user for this project and recorded in `decisions.md`.
+- No ❌ in the preflight table, or each ❌ accepted by the user for this project and recorded in `decisions.md`; the switches, the locale and the pass budget are recorded.
 
 ## Skills and agents
-- None beyond the manifest checks.
+- None beyond the manifest checks; `figma:figma-use` only with `Figma: yes`.
 
 ## Pitfalls
-- `docs/lessons.md` 2 (Figma fonts), 10 (own container), 13 (session root) and 17 (Figma font check at stage 2).
+- `docs/lessons.md` 2 (Figma fonts), 10 (own container), 13 (session root), 17 (Figma font check at stage 2), 21 (locale before stage 2) and 27 (agree the review passes).

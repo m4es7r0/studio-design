@@ -2,7 +2,11 @@
 
 Paths written `design/...` are relative to the client container `~/job/clients/<slug>/`; the session runs in `design/`, so commands use paths relative to it.
 
-Read before every `use_figma` call. Load the `figma:figma-use` skill (and `figma:figma-generate-library` for components, `figma:figma-generate-design` for screens).
+Read before every `use_figma` call. Load the `figma:figma-use` skill (and `figma:figma-generate-library` for components, `figma:figma-generate-design` for screens). These rules apply only with `Figma: yes` in `PROJECT.md`.
+
+- When attmpt-design scaled the design from a reference frame (web-landing), Figma variables hold the values at that frame's width, and the scale factor is written next to the tokens.
+- The figma-generate-library ledger lives in the client container, never in `/tmp`.
+- Mutations run one at a time; image capture into a temporary frame may run in parallel with the semantic build.
 
 ## Workflow per batch
 

@@ -217,6 +217,13 @@ on one.
 
 ## 4. Gaps found preparing the first real run (2026-09-30)
 
+Status 2026-10-22 (design-skills roles, branch `design-skills-roles`): closed — the locale is decided at
+stage 0; the reviewer reads `decisions.md`, the package and the pass budget; the number of directions
+follows the entry mode; Figma and the artifact are `PROJECT.md` switches; the package names its key
+screens and the deliverable options live in `docs/packages.md`. Still open — a real second theme in the
+harness (stage 4 keeps the `<Name>Dark` workaround), the committed contrast script, the capture-script
+template, density as a stage 2 decision, and the «ДС + код» package.
+
 A redesign of a coded product with an English UI, both themes and no Figma. The run's prompt works around each
 of these; fix them in the pipeline before the next such client.
 - Both themes: `build_harness.py` emits only `color.themes[0]` and a token has one value; aliased tokens resolve
