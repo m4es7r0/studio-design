@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural checks of the pipeline: skill and agent frontmatter, the ten stage references.
+# Structural checks of the pipeline: skill and agent frontmatter (agents run on opus or sonnet), the ten stage references.
 set -uo pipefail
 repo="$(cd "$(dirname "$0")/.." && pwd)"
 status=0
@@ -14,8 +14,9 @@ done
 for f in "$repo"/agents/*.md; do
   [ -f "$f" ] || continue
   name="$(basename "$f" .md)"
-  if [ "$(field "$f" name)" = "$name" ] && fm "$f" | grep -q '^description:' && [ "$(field "$f" model)" = "opus" ]; then echo "ok   agent $name"
-  else echo "FAIL agent $name: frontmatter needs name, description and model: opus"; status=1; fi
+  model="$(field "$f" model)"
+  if [ "$(field "$f" name)" = "$name" ] && fm "$f" | grep -q '^description:' && { [ "$model" = "opus" ] || [ "$model" = "sonnet" ]; }; then echo "ok   agent $name"
+  else echo "FAIL agent $name: frontmatter needs name, description and model: opus or sonnet"; status=1; fi
 done
 refs="$repo/skills/studio-design/references"
 for n in 00-intake 01-tz-analysis 02-direction 03-layout-budget 04-foundations 05-components 06-screens 07-figma 08-qa-handoff 09-revisions; do
